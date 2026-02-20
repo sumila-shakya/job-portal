@@ -4,6 +4,7 @@ import { exit } from 'node:process'
 import { db } from './config/mysql.config'
 import { connectMongoDb } from './config/mongodb.config'
 import mongoose from 'mongoose'
+import { ApiResponse } from './utils/apiResponse'
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -40,13 +41,14 @@ app.get('/api/health', async(_, res)=> {
         //testing mysql connection
         await db.execute('SELECT 1')
 
-        res.status(200).json({
+        const healthData = {
             status: 'ok',
-            message: 'server is running',
             mysql: "Connected",
             mongodb: mongodbStatus,
             timestamp: new Date().toISOString()
-        })
+        }
+
+        res.status(200).json(new ApiResponse(200,"Server is running",healthData))
     } catch (error) {
         res.status(500).json({
             success: false,
