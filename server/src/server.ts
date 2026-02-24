@@ -5,6 +5,7 @@ import { db } from './config/mysql.config'
 import { connectMongoDb } from './config/mongodb.config'
 import mongoose from 'mongoose'
 import { ApiResponse } from './utils/apiResponse'
+import { errorHandler } from './middlewares/error.middleware'
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -33,8 +34,13 @@ const startServer = async ()=> {
     }
 }
 
-app.get('/api/health', async(_, res)=> {
+app.get('/api/health', async(_, res, next)=> {
     try {
+        /*
+        testing the global error handler
+        throw new Error("Simulated crash")
+        */
+
         //testing mongodb connection
         const mongodbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
 
@@ -50,11 +56,10 @@ app.get('/api/health', async(_, res)=> {
 
         res.status(200).json(new ApiResponse(200,"Server is running",healthData))
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error instanceof Error ? error.message : "unexpected error occurred"
-        })
+        next(error)
     }
 })
+
+app.use(errorHandler)
 
 startServer()
