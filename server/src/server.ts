@@ -15,6 +15,7 @@ app.use(express.urlencoded({extended:true}))
 
 const startServer = async ()=> {
     try {
+        console.log("Starting server !!")
         //connecting mongodb database
         await connectMongoDb()
         console.log(`MongoDb database connected`)
