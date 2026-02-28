@@ -1,14 +1,212 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "a0ab0e4c-c7cc-4ebd-9562-6d62420d8f6f",
+  "id": "654feef8-1e68-4880-b70a-9c1060178bd2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "job_applications": {
+      "name": "job_applications",
+      "columns": {
+        "application_id": {
+          "name": "application_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "bigint unsigned",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "applicant_id": {
+          "name": "applicant_id",
+          "type": "bigint unsigned",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "applied_date": {
+          "name": "applied_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "application_status": {
+          "name": "application_status",
+          "type": "enum('pending','rejected','accepted','shortlisted','interviewed','withdrawn')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "job_applications_job_id_jobs_job_id_fk": {
+          "name": "job_applications_job_id_jobs_job_id_fk",
+          "tableFrom": "job_applications",
+          "tableTo": "jobs",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "job_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "job_applications_applicant_id_users_user_id_fk": {
+          "name": "job_applications_applicant_id_users_user_id_fk",
+          "tableFrom": "job_applications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "applicant_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "job_applications_application_id": {
+          "name": "job_applications_application_id",
+          "columns": [
+            "application_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "unique_application": {
+          "name": "unique_application",
+          "columns": [
+            "job_id",
+            "applicant_id"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "jobs": {
+      "name": "jobs",
+      "columns": {
+        "job_id": {
+          "name": "job_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "posted_by": {
+          "name": "posted_by",
+          "type": "bigint unsigned",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "onUpdate": true,
+          "default": "(now())"
+        },
+        "deadline_date": {
+          "name": "deadline_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "is_closed": {
+          "name": "is_closed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "is_deleted": {
+          "name": "is_deleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "title_idx": {
+          "name": "title_idx",
+          "columns": [
+            "title"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "jobs_posted_by_users_user_id_fk": {
+          "name": "jobs_posted_by_users_user_id_fk",
+          "tableFrom": "jobs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "posted_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "jobs_job_id": {
+          "name": "jobs_job_id",
+          "columns": [
+            "job_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
     "users": {
       "name": "users",
       "columns": {
-        "users_id": {
-          "name": "users_id",
+        "user_id": {
+          "name": "user_id",
           "type": "serial",
           "primaryKey": false,
           "notNull": true,
@@ -37,7 +235,7 @@
         },
         "role": {
           "name": "role",
-          "type": "enum('job_seeker','employer','admin')",
+          "type": "enum('job_seeker','company','admin')",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -71,10 +269,10 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "users_users_id": {
-          "name": "users_users_id",
+        "users_user_id": {
+          "name": "users_user_id",
           "columns": [
-            "users_id"
+            "user_id"
           ]
         }
       },
