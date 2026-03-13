@@ -1,0 +1,10 @@
+### register check
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "name":"sumila",
+    "email":"sumi123@gmail.com",
+    "password":"P@ssw0rd",
+    "role":"job_seeker"
+}

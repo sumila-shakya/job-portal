@@ -21,6 +21,15 @@ CREATE TABLE `jobs` (
 	CONSTRAINT `jobs_job_id` PRIMARY KEY(`job_id`)
 );
 --> statement-breakpoint
+CREATE TABLE `refresh_tokens` (
+	`token_id` serial AUTO_INCREMENT NOT NULL,
+	`refresh_token` varchar(512) NOT NULL,
+	`user_id` bigint unsigned NOT NULL,
+	`created_at` timestamp DEFAULT (now()),
+	`expires_at` timestamp NOT NULL,
+	CONSTRAINT `refresh_tokens_token_id` PRIMARY KEY(`token_id`)
+);
+--> statement-breakpoint
 CREATE TABLE `users` (
 	`user_id` serial AUTO_INCREMENT NOT NULL,
 	`name` varchar(255) NOT NULL,
@@ -37,4 +46,5 @@ CREATE TABLE `users` (
 ALTER TABLE `job_applications` ADD CONSTRAINT `job_applications_job_id_jobs_job_id_fk` FOREIGN KEY (`job_id`) REFERENCES `jobs`(`job_id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE `job_applications` ADD CONSTRAINT `job_applications_applicant_id_users_user_id_fk` FOREIGN KEY (`applicant_id`) REFERENCES `users`(`user_id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE `jobs` ADD CONSTRAINT `jobs_posted_by_users_user_id_fk` FOREIGN KEY (`posted_by`) REFERENCES `users`(`user_id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE `refresh_tokens` ADD CONSTRAINT `refresh_tokens_user_id_users_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 CREATE INDEX `title_idx` ON `jobs` (`title`);
