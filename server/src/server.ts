@@ -61,7 +61,7 @@ app.get('/api/health', async(_, res, next)=> {
             timestamp: new Date().toISOString()
         }
 
-        res.status(200).json(new ApiResponse(200,"Server is running",healthData))
+        res.status(200).json(new ApiResponse(200, healthData, "Server is running"))
     } catch (error) {
         next(error)
     }

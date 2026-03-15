@@ -25,7 +25,7 @@ export const authController = {
             res
             .status(201)
             .cookie('refreshToken',newUser.refreshToken,options)
-            .json(new ApiResponse(201,"User registered successfully",data))
+            .json(new ApiResponse(201, data, "User registered successfully"))
 
         } catch(error) {
             next(error)
@@ -52,7 +52,7 @@ export const authController = {
             res
             .status(200)
             .cookie('refreshToken',user.refreshToken,options)
-            .json(new ApiResponse(200,"User logged in successfully",data))
+            .json(new ApiResponse(200, data ,"User logged in successfully"))
         } catch(error) {
             next(error)
         }
@@ -75,7 +75,24 @@ export const authController = {
             res
             .status(200)
             .clearCookie('refreshToken',options)
-            .json(new ApiResponse(200,"User logged out successfully",{}))
+            .json(new ApiResponse(200,{},"User logged out successfully"))
+        } catch(error) {
+            next(error)
+        }
+    },
+
+    async getAccount(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userId = req.user?.userId
+            if(!userId) {
+                throw new ApiError(401,"Access Denied")
+            }
+
+            const data = await authService.getAccount(userId)
+
+            res
+            .status(200)
+            .json(new ApiResponse(200,data))
         } catch(error) {
             next(error)
         }

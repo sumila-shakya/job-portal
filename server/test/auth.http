@@ -26,3 +26,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvb
 {
 
 }
+
+### get account check
+GET http://localhost:3000/api/auth/account
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNTY0Njg3LCJleHAiOjE3NzM1NjUyODd9.RDtAoBgQ6moJSrdv3EDjWi1KfPabKnbL_NaL89ImbgY

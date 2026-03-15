@@ -4,7 +4,7 @@ export class ApiResponse <T> {
     public data:T
     public message:string
 
-    constructor(statusCode:number,message:string = "Success", data:T) {
+    constructor(statusCode:number, data:T, message:string = "Success") {
         this.statusCode = statusCode
         this.message = message
         this.success = statusCode < 400

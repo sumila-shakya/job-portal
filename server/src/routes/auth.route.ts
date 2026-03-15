@@ -5,12 +5,15 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 const router = Router()
 
 //registration route
-router.post('/register',authController.register)
+router.post('/register', authController.register)
 
 //login route
-router.post('/login',authController.login)
+router.post('/login', authController.login)
 
 //logout route
-router.post('/logout',authMiddleware,authController.logout)
+router.post('/logout',authMiddleware, authController.logout)
+
+//get account route
+router.get('/account',authMiddleware, authController.getAccount)
 
 export default router

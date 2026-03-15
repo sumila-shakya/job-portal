@@ -1,7 +1,7 @@
 import { db } from "../config/mysql.config";
 import { users, refreshTokens } from "../models/mysql.models";
 import { registrationType, loginType } from "../utils/validator";
-import { eq, and, lt } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { ApiError } from "../utils/apiError";
 import bcrypt from 'bcrypt'
 import { CompanyProfile, JobSeekersProfile } from "../models/mongodb.models";
@@ -129,5 +129,20 @@ export const authService = {
         await db
         .delete(refreshTokens)
         .where(eq(refreshTokens.userId,userId))
+    },
+
+    async getAccount(userId: number) {
+        const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.userId,userId))
+
+        //check for the user
+        if(!user) {
+            throw new ApiError(404,"Not found")
+        }
+
+        const {password:_, ...data} = user
+        return data
     }
 }
