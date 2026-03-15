@@ -3,6 +3,8 @@ import { registrationSchema, registrationType, loginSchema, loginType } from "..
 import { authService } from "../services/auth.service";
 import { ApiResponse } from "../utils/apiResponse";
 import { ApiError } from "../utils/apiError";
+import { jwtUtils } from "../utils/jwt";
+import { Payload } from "../@types/interface";
 
 export const authController = {
     //registration function
@@ -93,6 +95,32 @@ export const authController = {
             res
             .status(200)
             .json(new ApiResponse(200,data))
+        } catch(error) {
+            next(error)
+        }
+    },
+
+    async refreshToken(req: Request, res: Response, next: NextFunction) {
+        try {
+            const token = req.cookies?.refreshToken
+            if(!token) {
+                throw new ApiError(401,"Refresh token is required")
+            }
+
+            const {userId, role} = jwtUtils.verifyRefreshToken(token)
+
+            const {accessToken, refreshToken} = await authService.refreshToken(token, {userId,role})
+
+            const options = {
+                httpOnly: true,
+                maxAge: 7*24*60*60*1000,
+                sameSite: "strict" as const
+            }
+
+            res
+            .status(200)
+            .cookie('refreshToken',refreshToken,options)
+            .json(new ApiResponse(200,{accessToken}))
         } catch(error) {
             next(error)
         }

@@ -16,4 +16,7 @@ router.post('/logout',authMiddleware, authController.logout)
 //get account route
 router.get('/account',authMiddleware, authController.getAccount)
 
+//get new access token route
+router.post('/refresh',authController.refreshToken)
+
 export default router

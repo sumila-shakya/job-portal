@@ -1,12 +1,9 @@
-import { ROLE } from "../utils/constants"
+import { Payload } from "./interface"
 
 declare global {
     namespace Express {
         interface Request {
-            user?: {
-                userId: number,
-                role: typeof ROLE[number]
-            }
+            user?: Payload
         }
     }
 }

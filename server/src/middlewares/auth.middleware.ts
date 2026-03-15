@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { jwtUtils } from "../utils/jwt";
 import { ApiError } from "../utils/apiError";
+import { Payload } from "../@types/interface";
 
 export const authMiddleware = async(req: Request, res: Response, next: NextFunction) => {
     try {
@@ -9,7 +10,7 @@ export const authMiddleware = async(req: Request, res: Response, next: NextFunct
         if(!token) {
             throw new ApiError(401,"Token is required")
         }
-        const decoded = jwtUtils.verifyToken(token)
+        const decoded: Payload = jwtUtils.verifyToken(token)
 
         req.user = decoded
         next()

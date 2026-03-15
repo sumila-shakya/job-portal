@@ -21,12 +21,15 @@ Content-Type: application/json
 ### logout check
 POST http://localhost:3000/api/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNTYyODY2LCJleHAiOjE3NzM1NjM0NjZ9.CpcramxRwJkOkN5tbjOUTBzC-9ywqLZm__0MhyaI-uw
-
-{
-
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNTc1NzYyLCJleHAiOjE3NzM1NzYzNjJ9.5V3QVLk9EqJnj3s6fCZXOa6lHL8qOlPtIltCDfKmRJQ
+{}
 
 ### get account check
 GET http://localhost:3000/api/auth/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNTY0Njg3LCJleHAiOjE3NzM1NjUyODd9.RDtAoBgQ6moJSrdv3EDjWi1KfPabKnbL_NaL89ImbgY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNTc1NzYyLCJleHAiOjE3NzM1NzYzNjJ9.5V3QVLk9EqJnj3s6fCZXOa6lHL8qOlPtIltCDfKmRJQ
+
+### get new access token
+POST http://localhost:3000/api/auth/refresh
+Content-Type: application/json
+
+{}

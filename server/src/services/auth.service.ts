@@ -1,11 +1,12 @@
 import { db } from "../config/mysql.config";
 import { users, refreshTokens } from "../models/mysql.models";
 import { registrationType, loginType } from "../utils/validator";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { ApiError } from "../utils/apiError";
 import bcrypt from 'bcrypt'
 import { CompanyProfile, JobSeekersProfile } from "../models/mongodb.models";
 import { jwtUtils } from "../utils/jwt";
+import { Payload } from "../@types/interface";
 
 export const authService = {
     //registration service
@@ -47,7 +48,7 @@ export const authService = {
         }
 
         //generate access and refesh token
-        const payload = {
+        const payload: Payload = {
             userId: newUser.insertId,
             role: data.role
         }
@@ -92,7 +93,7 @@ export const authService = {
             throw new ApiError(401,"Invalid credentials")
         }
 
-        const payload = {
+        const payload: Payload = {
             userId: existingUser.userId,
             role: existingUser.role
         }
@@ -144,5 +145,47 @@ export const authService = {
 
         const {password:_, ...data} = user
         return data
+    },
+
+    async refreshToken(token:string, user: Payload) {
+        const [tokenRecord] = await db
+        .select()
+        .from(refreshTokens)
+        .where(and(
+            eq(refreshTokens.userId, user.userId),
+            eq(refreshTokens.refreshToken,token)
+        ))
+
+        if(!tokenRecord) {
+            throw new ApiError(401,"Access Denied")
+        }
+
+        if(tokenRecord.expiresAt < new Date()) {
+            await db
+            .delete(refreshTokens)
+            .where(eq(refreshTokens.userId,user.userId))
+            throw new ApiError(401,"Expired refresh token. Please log in again")
+        }
+
+        //refresh token rotation
+        const accessToken = jwtUtils.generateAccessToken(user)
+        const refreshToken = jwtUtils.generateRefreshToken(user)
+        const expiryDate = jwtUtils.getExpiryDate()
+
+        //deleting existing token
+        await db
+        .delete(refreshTokens)
+        .where(eq(refreshTokens.userId,user.userId))
+
+        //insert refresh token into the database
+        await db
+        .insert(refreshTokens)
+        .values({
+            userId: user.userId,
+            refreshToken: refreshToken,
+            expiresAt: expiryDate
+        }) 
+        
+        return {accessToken, refreshToken}
     }
 }
