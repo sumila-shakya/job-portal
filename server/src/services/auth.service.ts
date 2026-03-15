@@ -1,7 +1,7 @@
 import { db } from "../config/mysql.config";
 import { users, refreshTokens } from "../models/mysql.models";
-import { registrationType } from "../utils/validator";
-import { eq } from "drizzle-orm";
+import { registrationType, loginType } from "../utils/validator";
+import { eq, and, lt } from "drizzle-orm";
 import { ApiError } from "../utils/apiError";
 import bcrypt from 'bcrypt'
 import { CompanyProfile, JobSeekersProfile } from "../models/mongodb.models";
@@ -73,5 +73,61 @@ export const authService = {
             accessToken: accessToken,
             refreshToken: refreshToken
         }
+    },
+
+    async login(data: loginType) {
+        const [existingUser] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email,data.email))
+
+        //check for existing user
+        if(!existingUser) {
+            throw new ApiError(401,"Invalid credentials")
+        }
+
+        //password checkup
+        const isValidPassword:boolean = await bcrypt.compare(data.password,existingUser.password)
+        if(!isValidPassword) {
+            throw new ApiError(401,"Invalid credentials")
+        }
+
+        const payload = {
+            userId: existingUser.userId,
+            role: existingUser.role
+        }
+
+        const accessToken = jwtUtils.generateAccessToken(payload)
+        const refreshToken = jwtUtils.generateRefreshToken(payload)
+        const expiryDate = jwtUtils.getExpiryDate()
+
+        //deleting existing token
+        await db
+        .delete(refreshTokens)
+        .where(eq(refreshTokens.userId,existingUser.userId))
+
+        //insert refresh token into the database
+        await db
+        .insert(refreshTokens)
+        .values({
+            userId: existingUser.userId,
+            refreshToken: refreshToken,
+            expiresAt: expiryDate
+        }) 
+
+        return {
+            userId: existingUser.userId,
+            name: existingUser.name,
+            email: existingUser.email,
+            role: existingUser.role,
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        }
+    },
+
+    async logout(userId: number) {
+        await db
+        .delete(refreshTokens)
+        .where(eq(refreshTokens.userId,userId))
     }
 }

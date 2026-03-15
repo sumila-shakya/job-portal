@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { registrationSchema,registrationType } from "../utils/validator";
+import { registrationSchema, registrationType, loginSchema, loginType } from "../utils/validator";
 import { authService } from "../services/auth.service";
 import { ApiResponse } from "../utils/apiResponse";
+import { ApiError } from "../utils/apiError";
 
 export const authController = {
     //registration function
@@ -17,7 +18,8 @@ export const authController = {
 
             const options = {
                 httpOnly: true,
-                maxAge: 7*24*60*60*1000
+                maxAge: 7*24*60*60*1000,
+                sameSite: "strict" as const
             }
 
             res
@@ -30,5 +32,52 @@ export const authController = {
         }
     },
 
-    
+    //login function
+    async login(req: Request, res: Response, next: NextFunction) {
+        try {
+            //validate data
+            const validatedData: loginType = loginSchema.parse(req.body)
+
+            //get login data
+            const user = await authService.login(validatedData)
+
+            const {refreshToken:_,...data} = user
+
+            const options = {
+                httpOnly: true,
+                maxAge: 7*24*60*60*1000,
+                sameSite: "strict" as const
+            }
+
+            res
+            .status(200)
+            .cookie('refreshToken',user.refreshToken,options)
+            .json(new ApiResponse(200,"User logged in successfully",data))
+        } catch(error) {
+            next(error)
+        }
+    },
+
+    async logout(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userId = req.user?.userId
+            if(!userId) {
+                throw new ApiError(401,"Access Denied")
+            }
+
+            await authService.logout(userId)
+
+            const options = {
+                httpOnly: true,
+                sameSite: "strict" as const
+            }
+
+            res
+            .status(200)
+            .clearCookie('refreshToken',options)
+            .json(new ApiResponse(200,"User logged out successfully",{}))
+        } catch(error) {
+            next(error)
+        }
+    }
 }

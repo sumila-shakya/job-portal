@@ -12,4 +12,10 @@ export const registrationSchema = z.object({
     role: z.enum(ROLE,{message:"Invalid role"})
 })
 
+export const loginSchema = z.object({
+    email: z.string().email({message: "Invalid email format"}),
+    password: z.string().min(1,{message:"Password is required"})
+})
+
 export type registrationType = z.infer<typeof registrationSchema>
+export type loginType = z.infer<typeof loginSchema>
