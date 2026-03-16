@@ -1,4 +1,5 @@
 import multer from "multer";
+import { ApiError } from "../utils/apiError";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -9,4 +10,14 @@ const storage = multer.diskStorage({
     }
 })
 
-export const upload = multer({storage})
+export const upload = multer({
+    storage,
+    limits: {fileSize: 5*1024*1024},
+    fileFilter: (req, file, cb)=> {
+        if(file.mimetype === 'application/pdf') {
+            cb(null,true)
+        } else {
+            cb(new ApiError(400,"Only pdf files are allowed"))
+        }
+    }
+})

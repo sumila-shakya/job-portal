@@ -19,5 +19,6 @@ export const uploadOnCloudinary = async (localFilePath: string) => {
         return uploadResult
     } catch(error) {
         fs.unlinkSync(localFilePath)
+        return null
     }
 }

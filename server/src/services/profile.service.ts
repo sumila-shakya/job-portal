@@ -3,6 +3,7 @@ import { users } from "../models/mysql.models";
 import { db } from "../config/mysql.config";
 import { eq } from "drizzle-orm";
 import { ApiError } from "../utils/apiError";
+import { JProfileUpdates } from "../@types/interface";
 
 export const myProfileServices = {
     async getMyProfile(userId: number) {
@@ -36,5 +37,18 @@ export const myProfileServices = {
         }
     },
 
+    async updateProfile(updates: JProfileUpdates, userId: number) {
+        const updatedProfile = await JobSeekersProfile
+        .findOneAndUpdate(
+            {jobSeekerId: userId},
+            {$set: updates},
+            {new: true}
+        ).select({_id:0, isHidden:0, jobSeekerId: 0, __v:0})
 
+        if(!updatedProfile) {
+            throw new ApiError(404,"User Not Found")
+        }
+
+        return updatedProfile
+    }
 }

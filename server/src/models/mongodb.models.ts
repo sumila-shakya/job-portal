@@ -13,7 +13,7 @@ interface IJobSeeker {
         year: number
     }[],
     address?: { country: string, city: string},
-    experience?: { company: string, year: number, role: string}[],
+    experience?: { company: string, years: number, role: string}[],
     resumeUrl?: string,
     phoneNo?: string,
     isHidden: boolean
@@ -64,7 +64,7 @@ const jobSeekerSchema = new mongoose.Schema<IJobSeeker>({
     },
     experience: [{
         company: {type: String},
-        year: {type: Number},
+        years: {type: Number},
         role: {type: String}
     }],
     resumeUrl: {type: String},

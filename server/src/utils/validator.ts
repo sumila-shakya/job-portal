@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import { ROLE } from './constants'
+import { ROLE, EDUCATION_LEVEL } from './constants'
 
 export const registrationSchema = z.object({
     name: z.string().min(2,{message:"Name must be atleast two characters long"}).trim(),
@@ -17,5 +17,21 @@ export const loginSchema = z.object({
     password: z.string().min(1,{message:"Password is required"})
 })
 
+const JSProfileSchema = z.object({
+    bio: z.string(),
+    skills: z.array(z.string()),
+    education: z.array(z.object({
+        level: z.enum(EDUCATION_LEVEL),
+        field: z.string(),
+        institution: z.string(),
+        year: z.number().min(1900)
+    })),
+    address: z.object({ country: z.string(), city: z.string()}),
+    experience: z.array(z.object({ company: z.string(), years: z.number().positive(), role: z.string()})),
+    phoneNo: z.string(),
+})
+export const updateJSProfileSchema = JSProfileSchema.partial()
+
 export type registrationType = z.infer<typeof registrationSchema>
 export type loginType = z.infer<typeof loginSchema>
+export type updateJSProfileType = z.infer<typeof updateJSProfileSchema>
