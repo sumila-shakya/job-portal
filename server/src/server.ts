@@ -7,6 +7,7 @@ import mongoose from 'mongoose'
 import { ApiResponse } from './utils/apiResponse'
 import { errorHandler } from './middlewares/error.middleware'
 import authRouter from './routes/auth.route'
+import profileRouter from './routes/profile.route'
 import cookieParser from 'cookie-parser'
 
 const PORT = process.env.PORT || 3000
@@ -18,6 +19,7 @@ app.use(cookieParser())
 
 //authentication route
 app.use('/api/auth',authRouter)
+app.use('/api/profile',profileRouter)
 
 const startServer = async ()=> {
     try {
