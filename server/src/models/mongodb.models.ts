@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { POSITION, EMPLOYMENT_TYPE, WORKTYPE, EDUCATION_LEVEL } from "../utils/constants";
 
-//interface definition
+/* ------------------------------- interface definition ------------------------------- */
 interface IJobSeeker {
     jobSeekerId: number,
     bio?: string,
@@ -47,7 +47,7 @@ interface IJob {
 }
 
 
-//schema definition
+/* ------------------------------- schema definition ------------------------------- */
 const jobSeekerSchema = new mongoose.Schema<IJobSeeker>({
     jobSeekerId: {type: Number, required: true, unique: true},
     bio: {type: String},
@@ -112,7 +112,8 @@ const JobSchema = new mongoose.Schema<IJob>({
     category: {type: String}
 })
 
-//indexing
+
+/* ------------------------------- indexing ------------------------------- */
 JobSchema.index({'category':1, 'location.city':1, 'position':1})
 JobSchema.index({'location.city':1, 'employmentType':1, 'workType':1})
 JobSchema.index(
@@ -124,7 +125,8 @@ JobSchema.index(
     {partialFilterExpression: {'experience':{$exists:true}}}
 )
 
-//models
+
+/* ------------------------------- models ------------------------------- */
 export const JobSeekersProfile = mongoose.model<IJobSeeker>('JobSeekersProfile',jobSeekerSchema)
 export const CompanyProfile = mongoose.model<ICompany>('CompanyProfile',companySchema)
 export const JobDetail = mongoose.model<IJob>('JobDetail',JobSchema)

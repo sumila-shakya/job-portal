@@ -1,0 +1,28 @@
+### get my profile route
+GET http://localhost:3000/api/profile/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNzQwMTcxLCJleHAiOjE3NzM3NDA3NzF9.CnRrhaIx9FACA7fGUj0bv62bqlALvH0oc_oS1XIAt_4
+
+### get company profile route
+GET  http://localhost:3000/api/profile/company/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzczNzQwNjc5LCJleHAiOjE3NzM3NDEyNzl9.GAPICVn5Y5DxHFnohYXIS_4GxskzUjdV_MwRTK61Zc0
+
+### view Job Seeker public profile route
+GET http://localhost:3000/api/profile/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzczNzQwNjc5LCJleHAiOjE3NzM3NDEyNzl9.GAPICVn5Y5DxHFnohYXIS_4GxskzUjdV_MwRTK61Zc0
+
+### view Company public profile route
+GET http://localhost:3000/api/profile/company/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNjQzNDcxLCJleHAiOjE3NzM2NDQwNzF9.hn_Cs8MG9GZCml-6_jGUwehr7sMSnE7z5UGUSnJ1Y5w
+
+### update Company profile route
+PATCH http://localhost:3000/api/profile/company/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzczNzQwNjc5LCJleHAiOjE3NzM3NDEyNzl9.GAPICVn5Y5DxHFnohYXIS_4GxskzUjdV_MwRTK61Zc0
+
+{
+    "aboutUs": "Google is a great company",
+    "specialties": ["nodejs","typescript"],
+    "hqLocation": { "country": "America", "city": "New York"},
+    "contactNo": "01-12345346"
+
+}

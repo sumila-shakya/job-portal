@@ -1,0 +1,41 @@
+info:
+  name: updateJSProfile
+  type: http
+  seq: 1
+
+http:
+  method: PATCH
+  url: http://localhost:3000/api/profile/me
+  body:
+    type: multipart-form
+    data:
+      - name: bio
+        type: text
+        value: Hi! i am a backend developer
+      - name: skills
+        type: text
+        value: '["nodejs","typescript"]'
+      - name: education
+        type: text
+        value: |2
+           [{
+                  "level": "Bachelor",
+                  "field": "CSIT",
+                  "institution": "ASCOL",
+                  "year": 2080
+              }]
+      - name: address
+        type: text
+        value: '{ "country": "Nepal", "city": "ktm"}'
+      - name: phoneNo
+        type: text
+        value: 01-123456
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNzQwMTcxLCJleHAiOjE3NzM3NDA3NzF9.CnRrhaIx9FACA7fGUj0bv62bqlALvH0oc_oS1XIAt_4
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

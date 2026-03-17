@@ -27,11 +27,27 @@ const JSProfileSchema = z.object({
         year: z.number().min(1900)
     })),
     address: z.object({ country: z.string(), city: z.string()}),
-    experience: z.array(z.object({ company: z.string(), years: z.number().positive(), role: z.string()})),
+    experience: z.array(z.object({ 
+        company: z.string(), 
+        years: z.number().positive(), 
+        role: z.string()
+    })),
     phoneNo: z.string(),
 })
 export const updateJSProfileSchema = JSProfileSchema.partial()
 
+const companyProfileSchema = z.object({
+    aboutUs: z.string(),
+    specialties: z.array(z.string()),
+    hqLocation: z.object({ country: z.string(), city: z.string()}),
+    contactNo: z.string(),
+    companyWebsiteURL: z.string().url()
+    .regex(/^https?:\/\//, {message: "Only http/https allowed"})
+    .max(2048, {message: "URL too long"}),
+})
+export const updateComProfileSchema = companyProfileSchema.partial()
+
 export type registrationType = z.infer<typeof registrationSchema>
 export type loginType = z.infer<typeof loginSchema>
 export type updateJSProfileType = z.infer<typeof updateJSProfileSchema>
+export type updateComProfileType = z.infer<typeof updateComProfileSchema>
