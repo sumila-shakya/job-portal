@@ -137,7 +137,7 @@ export const viewProfileController = {
             .status(200)
             .json(new ApiResponse(200,data))
         } catch(error) {
-            next()
+            next(error)
         }
     },
 
@@ -159,7 +159,7 @@ export const viewProfileController = {
             .status(200)
             .json(new ApiResponse(200,data))
         } catch(error) {
-            next()
+            next(error)
         }
     }
 }

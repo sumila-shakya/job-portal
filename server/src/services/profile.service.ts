@@ -107,7 +107,10 @@ export const viewProfileServices = {
         }
 
         const profile = await JobSeekersProfile.findOne(
-            {jobSeekerId: jobSeekerId},
+            {
+                jobSeekerId: jobSeekerId,
+                isHidden: false
+            },
             {_id:0, isHidden:0, jobSeekerId: 0, __v:0, createdAt:0, updatedAt:0}
         )
 
@@ -132,7 +135,10 @@ export const viewProfileServices = {
         }
 
         const profile = await CompanyProfile.findOne(
-            {companyId: companyId},
+            {
+                companyId: companyId,
+                isHidden: false
+            },
             {_id:0, isHidden:0, companyId: 0, __v:0, createdAt:0, updatedAt:0}
         )
 

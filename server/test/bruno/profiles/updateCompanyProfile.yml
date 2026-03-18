@@ -1,0 +1,30 @@
+info:
+  name: updateCompanyProfile
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: http://localhost:3000/api/profile/company/me
+  body:
+    type: json
+    data: |-
+      {
+          "aboutUs": "Google is a great company",
+          "specialties": ["nodejs","typescript","C++"],
+          "hqLocation": { 
+            "country": "America", 
+            "city": "New York"
+          },
+          "contactNo": "01-12345346",
+          "companyWebsiteURL": "https://about.google/"
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzczODExOTg5LCJleHAiOjE3NzM4MTI1ODl9.0Yoto4ZIwN29hbCubK2f937m8rPZsi91Y-aMT4FtifE
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

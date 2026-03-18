@@ -1,7 +1,7 @@
 info:
   name: updateJSProfile
   type: http
-  seq: 1
+  seq: 3
 
 http:
   method: PATCH
@@ -30,9 +30,13 @@ http:
       - name: phoneNo
         type: text
         value: 01-123456
+      - name: resume
+        type: file
+        value:
+          - C:\Users\sumil\Downloads\sampleResume.pdf
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczNzQwMTcxLCJleHAiOjE3NzM3NDA3NzF9.CnRrhaIx9FACA7fGUj0bv62bqlALvH0oc_oS1XIAt_4
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzczODExNTI0LCJleHAiOjE3NzM4MTIxMjR9.xBxh7JO6tosXC4RK5_4Wdg9COzWokKBuHdmm5wuZ0dY
 
 settings:
   encodeUrl: true
