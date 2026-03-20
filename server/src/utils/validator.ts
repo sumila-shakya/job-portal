@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import { ROLE, EDUCATION_LEVEL } from './constants'
+import { ROLE, EDUCATION_LEVEL, POSITION, WORKTYPE, EMPLOYMENT_TYPE } from './constants'
 
 export const registrationSchema = z.object({
     name: z.string().min(2,{message:"Name must be atleast two characters long"}).trim(),
@@ -47,7 +47,36 @@ const companyProfileSchema = z.object({
 })
 export const updateComProfileSchema = companyProfileSchema.partial()
 
+export const jobSchema = z.object({
+    title: z.string().min(2,{message: "The title must be at least two characters long"}).trim(),
+    deadlineDate: z.coerce.date().refine((date)=> date > new Date(), {message: "Job is already closed"}),
+    description: z.string().optional(),
+    requirement: z.array(z.string()),
+    position: z.enum(POSITION,{message:"Invalid position"}),
+    employmentType: z.enum(EMPLOYMENT_TYPE,{message:"Invalid employment type"}),
+    workType: z.enum(WORKTYPE,{message:"Invalid work type"}),
+    education: z.object({
+        level: z.enum(EDUCATION_LEVEL),
+        field: z.string()
+    }).optional(),
+    location: z.object({ country: z.string(), city: z.string()}),
+    salary: z.object({ 
+        min: z.number().positive(), 
+        max: z.number().positive(), 
+        currency: z.string().min(1)
+    }).refine((data)=> data.min <= data.max, {message:"maximum salary must be greater than minimum salary"})
+    .optional(),
+    experience: z.object({ 
+        min: z.number().positive(), 
+        max: z.number().positive()
+    })
+    .refine((data)=> data.min <= data.max, {message:"maximum experience must be greater than minimum experience"})
+    .optional(),
+    category: z.string().min(2,{message: "The category must be at least two characters long"}).trim()
+})
+
 export type registrationType = z.infer<typeof registrationSchema>
 export type loginType = z.infer<typeof loginSchema>
 export type updateJSProfileType = z.infer<typeof updateJSProfileSchema>
 export type updateComProfileType = z.infer<typeof updateComProfileSchema>
+export type jobType = z.infer<typeof jobSchema>

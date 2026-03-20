@@ -78,11 +78,8 @@ export const companyProfileController = {
             if(!userId) {
                 throw new ApiError(401,"Access Denied")
             }
-            const body = {...req.body}
-            if(typeof body.specialties === 'string') body.specialties = JSON.parse(body.specialties)
-            if(typeof body.hqLocation === 'string') body.hqLocation = JSON.parse(body.hqLocation)
 
-            const updates: updateComProfileType = updateComProfileSchema.parse(body)
+            const updates: updateComProfileType = updateComProfileSchema.parse(req.body)
             if(Object.keys(updates).length === 0) {
                 throw new ApiError(400, "No data provided for updates")
             }

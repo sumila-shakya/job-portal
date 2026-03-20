@@ -25,7 +25,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvb
 
 ### get account check
 GET http://localhost:3000/api/auth/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzczNzQwNjc5LCJleHAiOjE3NzM3NDEyNzl9.GAPICVn5Y5DxHFnohYXIS_4GxskzUjdV_MwRTK61Zc0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0MDA2NDI2LCJleHAiOjE3NzQwMDcwMjZ9.dshmrW2Q_9_5XiXszGNIdilAvQqVbNd-4LUP8THwiaM
 
 ### get new access token
 POST http://localhost:3000/api/auth/refresh

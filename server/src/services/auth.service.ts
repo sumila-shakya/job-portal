@@ -1,5 +1,5 @@
 import { db } from "../config/mysql.config";
-import { users, refreshTokens } from "../models/mysql.models";
+import { users, refreshTokens, User, Token, NewUser, NewToken } from "../models/mysql.models";
 import { registrationType, loginType } from "../utils/validator";
 import { and, eq } from "drizzle-orm";
 import { ApiError } from "../utils/apiError";
@@ -11,7 +11,7 @@ import { Payload } from "../@types/interface";
 export const authService = {
     //registration service
     async register(data: registrationType) {
-        const existingUser = await db
+        const existingUser: User[] = await db
         .select()
         .from(users)
         .where(eq(users.email,data.email))
@@ -24,15 +24,17 @@ export const authService = {
         //hash password
         const hashedpassword:string = await bcrypt.hash(data.password,10)
 
-        //insert the new user
-        const [newUser] = await db
-        .insert(users)
-        .values({
+        const user: NewUser = {
             name: data.name,
             email: data.email,
             role: data.role,
             password: hashedpassword
-        })
+        }
+
+        //insert the new user
+        const [newUser] = await db
+        .insert(users)
+        .values(user)
         
         //create skeleton user profile
         const profileCreator = {
@@ -58,13 +60,15 @@ export const authService = {
         const expiryDate = jwtUtils.getExpiryDate()
 
         //insert refresh token into the database
-        await db
-        .insert(refreshTokens)
-        .values({
+        const token: NewToken = {
             userId: newUser.insertId,
             refreshToken: refreshToken,
             expiresAt: expiryDate
-        }) 
+        }
+
+        await db
+        .insert(refreshTokens)
+        .values(token) 
 
         return {
             userId: newUser.insertId,
@@ -77,7 +81,7 @@ export const authService = {
     },
 
     async login(data: loginType) {
-        const [existingUser] = await db
+        const [existingUser]: User[] = await db
         .select()
         .from(users)
         .where(eq(users.email,data.email))
@@ -108,13 +112,14 @@ export const authService = {
         .where(eq(refreshTokens.userId,existingUser.userId))
 
         //insert refresh token into the database
-        await db
-        .insert(refreshTokens)
-        .values({
+        const token: NewToken = {
             userId: existingUser.userId,
             refreshToken: refreshToken,
             expiresAt: expiryDate
-        }) 
+        }
+        await db
+        .insert(refreshTokens)
+        .values(token) 
 
         return {
             userId: existingUser.userId,
@@ -133,7 +138,7 @@ export const authService = {
     },
 
     async getAccount(userId: number) {
-        const [user] = await db
+        const [user]: User[] = await db
         .select()
         .from(users)
         .where(eq(users.userId,userId))
@@ -148,7 +153,7 @@ export const authService = {
     },
 
     async refreshToken(token:string, user: Payload) {
-        const [tokenRecord] = await db
+        const [tokenRecord]: Token[] = await db
         .select()
         .from(refreshTokens)
         .where(and(
@@ -178,13 +183,14 @@ export const authService = {
         .where(eq(refreshTokens.userId,user.userId))
 
         //insert refresh token into the database
-        await db
-        .insert(refreshTokens)
-        .values({
+        const newToken: NewToken = {
             userId: user.userId,
             refreshToken: refreshToken,
             expiresAt: expiryDate
-        }) 
+        }
+        await db
+        .insert(refreshTokens)
+        .values(newToken) 
         
         return {accessToken, refreshToken}
     }

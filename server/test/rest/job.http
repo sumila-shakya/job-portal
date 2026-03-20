@@ -1,0 +1,35 @@
+### post job
+POST http://localhost:3000/api/jobs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0MDA1NzM5LCJleHAiOjE3NzQwMDYzMzl9.2qKD9XALIqQgtCgDcv1knr_ewgLWtO1geO8Lj_9EIl4
+
+{
+    "title": "Backend developer",
+    "deadlineDate": "2026-04-01",
+    "requirement": ["Node JS","Typescript","MySQL"],
+    "position": "junior",
+    "employmentType": "intern",
+    "workType": "on-site",
+    "education": {
+        "level": "Bachelor",
+        "field": "CSIT"
+    },
+    "location": {
+        "country": "Nepal",
+        "city": "Ktm"
+    },
+    "salary": {
+        "min": 10000,
+        "max": 20000,
+        "currency": "Rs."
+    },
+    "category": "Information and Technology"
+}
+
+### get all posted jobs
+GET http://localhost:3000/api/jobs/myJobs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0MDA2NDI2LCJleHAiOjE3NzQwMDcwMjZ9.dshmrW2Q_9_5XiXszGNIdilAvQqVbNd-4LUP8THwiaM
+
+### get the job details
+GET http://localhost:3000/api/jobs/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0MDA2NDI2LCJleHAiOjE3NzQwMDcwMjZ9.dshmrW2Q_9_5XiXszGNIdilAvQqVbNd-4LUP8THwiaM

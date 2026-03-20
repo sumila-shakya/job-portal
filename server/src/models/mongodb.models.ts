@@ -29,13 +29,13 @@ interface ICompany {
     isHidden: boolean
 }
 
-interface IJob {
+export interface IJob {
     jobId: number,
     description?: string,
     requirement: string[],
-    position: typeof POSITION[number];
-    employmentType: typeof EMPLOYMENT_TYPE[number];
-    workType: typeof WORKTYPE[number];
+    position: typeof POSITION[number],
+    employmentType: typeof EMPLOYMENT_TYPE[number],
+    workType: typeof WORKTYPE[number],
     education?: {
         level: typeof EDUCATION_LEVEL[number],
         field: string,

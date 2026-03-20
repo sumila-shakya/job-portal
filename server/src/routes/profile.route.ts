@@ -3,11 +3,14 @@ import { myProfileController, companyProfileController, viewProfileController } 
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { upload } from "../middlewares/multer.middleware";
 import { authorizeRole } from "../middlewares/role.middleware";
+import { checkActiveUser } from "../middlewares/active.middleware";
 
 const router = Router()
 
 //authenticate user
 router.use(authMiddleware)
+//check for active user
+router.use(checkActiveUser)
 
 /* ------------------------------- Job Seeker Profile Routes ------------------------------- */
 //get job seeker own profile

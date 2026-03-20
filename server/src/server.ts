@@ -8,7 +8,9 @@ import { ApiResponse } from './utils/apiResponse'
 import { errorHandler } from './middlewares/error.middleware'
 import authRouter from './routes/auth.route'
 import profileRouter from './routes/profile.route'
+import jobRouter from './routes/job.route'
 import cookieParser from 'cookie-parser'
+import { expiredJobsCron } from './cron/job.cron'
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -17,9 +19,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 
-//authentication route
 app.use('/api/auth',authRouter)
 app.use('/api/profile',profileRouter)
+app.use('/api/jobs',jobRouter)
 
 const startServer = async ()=> {
     try {
@@ -31,6 +33,10 @@ const startServer = async ()=> {
         //connecting mysql database
         await db.execute('SELECT 1')
         console.log(`MySQL database connected`)
+
+        //initializing cron jobs
+        console.log("Cleaning up expired jobs")
+        expiredJobsCron()
 
         //listen on port 3000
         app.listen(PORT,()=>{
