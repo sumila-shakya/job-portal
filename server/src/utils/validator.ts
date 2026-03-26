@@ -1,6 +1,7 @@
 import {z} from 'zod'
 import { ROLE, EDUCATION_LEVEL, POSITION, WORKTYPE, EMPLOYMENT_TYPE } from './constants'
 
+/* ------------------------------- Registration Validation ------------------------------- */
 export const registrationSchema = z.object({
     name: z.string().min(2,{message:"Name must be atleast two characters long"}).trim(),
     email: z.string().email({message: "Invalid email format"}),
@@ -12,11 +13,13 @@ export const registrationSchema = z.object({
     role: z.enum(ROLE,{message:"Invalid role"})
 })
 
+/* ------------------------------- Login Validation ------------------------------- */
 export const loginSchema = z.object({
     email: z.string().email({message: "Invalid email format"}),
     password: z.string().min(1,{message:"Password is required"})
 })
 
+/* ------------------------------- Job Seeker Profile Validation ------------------------------- */
 const JSProfileSchema = z.object({
     bio: z.string(),
     skills: z.array(z.string()),
@@ -36,6 +39,7 @@ const JSProfileSchema = z.object({
 })
 export const updateJSProfileSchema = JSProfileSchema.partial()
 
+/* ------------------------------- Company Profile Validation ------------------------------- */
 const companyProfileSchema = z.object({
     aboutUs: z.string(),
     specialties: z.array(z.string()),
@@ -47,6 +51,7 @@ const companyProfileSchema = z.object({
 })
 export const updateComProfileSchema = companyProfileSchema.partial()
 
+/* ------------------------------- Job Posting Validation ------------------------------- */
 export const jobSchema = z.object({
     title: z.string().min(2,{message: "The title must be at least two characters long"}).trim(),
     deadlineDate: z.coerce.date().refine((date)=> date > new Date(), {message: "Job is already closed"}),
@@ -75,8 +80,28 @@ export const jobSchema = z.object({
     category: z.string().min(2,{message: "The category must be at least two characters long"}).trim()
 })
 
+/* ------------------------------- Job Query Validation ------------------------------- */
+const jobQSchema = z.object({
+    title: z.string().min(2).trim(),
+    category: z.string().min(2).trim(),
+    position: z.enum(POSITION,{message:"Invalid position"}),
+    employmentType: z.enum(EMPLOYMENT_TYPE,{message:"Invalid employment type"}),
+    workType: z.enum(WORKTYPE,{message:"Invalid work type"}),
+    country: z.string().min(2), 
+    city: z.string().min(2),
+    salary_min: z.coerce.number().positive(), 
+    salary_max: z.coerce.number().positive(),
+    experience_min: z.coerce.number().positive(), 
+    experience_max: z.coerce.number().positive(),
+    education_level: z.enum(EDUCATION_LEVEL),
+    page: z.coerce.number().min(1).default(1),
+    limit: z.coerce.number().min(1).max(5)
+})
+export const jobQuerySchema = jobQSchema.partial()
+
 export type registrationType = z.infer<typeof registrationSchema>
 export type loginType = z.infer<typeof loginSchema>
 export type updateJSProfileType = z.infer<typeof updateJSProfileSchema>
 export type updateComProfileType = z.infer<typeof updateComProfileSchema>
 export type jobType = z.infer<typeof jobSchema>
+export type jobQueryType = z.infer<typeof jobQuerySchema>

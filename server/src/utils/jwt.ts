@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-import { ROLE } from './constants'
 import { ApiError } from './apiError'
 import { Payload } from '../@types/interface'
 

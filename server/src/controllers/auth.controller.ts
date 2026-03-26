@@ -4,7 +4,6 @@ import { authService } from "../services/auth.service";
 import { ApiResponse } from "../utils/apiResponse";
 import { ApiError } from "../utils/apiError";
 import { jwtUtils } from "../utils/jwt";
-import { Payload } from "../@types/interface";
 
 export const authController = {
     //registration function
@@ -16,7 +15,7 @@ export const authController = {
             //insert into database
             const newUser = await authService.register(validatedData)
 
-            const {refreshToken:_,...data} = newUser
+            const {refreshToken,...data} = newUser
 
             const options = {
                 httpOnly: true,
@@ -43,7 +42,7 @@ export const authController = {
             //get login data
             const user = await authService.login(validatedData)
 
-            const {refreshToken:_,...data} = user
+            const {refreshToken,...data} = user
 
             const options = {
                 httpOnly: true,

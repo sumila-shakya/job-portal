@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/apiError";
-import { jobSchema, jobType } from "../utils/validator";
+import { jobSchema, jobType, jobQuerySchema, jobQueryType } from "../utils/validator";
 import { jobServices } from "../services/job.service";
 import { ApiResponse } from "../utils/apiResponse";
 
@@ -52,6 +52,20 @@ export const jobController = {
             res
             .status(200)
             .json(new ApiResponse(200, jobDetails))
+        } catch(error) {
+            next(error)
+        }
+    },
+
+    async viewJobs(req: Request, res: Response, next: NextFunction) {
+        try {
+            const query: jobQueryType = jobQuerySchema.parse(req.query)
+
+            const data = await jobServices.viewJobs(query)
+
+            res
+            .status(200)
+            .json(new ApiResponse(200,data))
         } catch(error) {
             next(error)
         }

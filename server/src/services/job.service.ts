@@ -1,8 +1,9 @@
 import { db } from "../config/mysql.config";
 import { users, jobs, NewJob, Job, User } from "../models/mysql.models";
-import { JobDetail, CompanyProfile, IJob } from "../models/mongodb.models";
-import { jobType } from "../utils/validator";
-import { and, eq, lt } from "drizzle-orm";
+import { JobDetail, CompanyProfile } from "../models/mongodb.models";
+import { IJob } from "../@types/interface";
+import { jobType, jobQueryType } from "../utils/validator";
+import { and, eq, lt, gt, inArray, like, desc, count } from "drizzle-orm";
 import { ApiError } from "../utils/apiError";
 
 
@@ -79,12 +80,12 @@ export const jobServices = {
             throw new ApiError(404,"Job not found")
         }
 
-        const result = await JobDetail.findOne({jobId: reqJob.jobId})
+        const result = await JobDetail.findOne({jobId: reqJob.jobId}).lean()
         if(!result) {
             throw new ApiError(500,"job details missing")
         }
 
-        const {__v,_id,jobId, ...data} = result.toJSON()
+        const {__v,_id,jobId, ...data} = result
         return {
             jobId: reqJob.jobId,
             title: reqJob.title,
@@ -93,7 +94,174 @@ export const jobServices = {
             createdAt: reqJob.createdAt,
             updatedAt: reqJob.updatedAt,
             details: data
+        } 
+    },
+
+    async viewJobs(data: jobQueryType) {
+        const page = Number(data.page) || 1
+        const limit = Number(data.limit) || 5
+        const skip = (page - 1) * limit
+
+        const mysqlCond = []
+        if(data.title) {
+            mysqlCond.push(like(jobs.title,`%${data.title}%`))
         }
-        
+        const isTitle = mysqlCond.length === 0 ? false : true
+        mysqlCond.push(eq(jobs.isClosed, false))
+        mysqlCond.push(eq(jobs.isDeleted, false))
+        mysqlCond.push(gt(jobs.deadlineDate, new Date()))
+
+        const mongoFilter: Record<string,any> = {}
+        if(data.position) mongoFilter['position'] = data.position
+        if(data.employmentType) mongoFilter['employmentType'] = data.employmentType
+        if(data.workType) mongoFilter['workType'] = data.workType
+        if(data.category) mongoFilter['category'] = data.category
+        if(data.country) mongoFilter['location.country'] = data.country
+        if(data.city) mongoFilter['location.city'] = data.city
+        if(data.salary_max) mongoFilter['salary.max'] = {$lte: data.salary_max}
+        if(data.salary_min) mongoFilter['salary.min'] = {$gte: data.salary_min}
+        if(data.experience_max) mongoFilter['experience.max'] = {$lte: data.experience_max}
+        if(data.experience_min) mongoFilter['experience.min'] = {$gte: data.experience_min}
+        if(data.education_level) mongoFilter['education.level'] = data.education_level
+
+        const isMongoFilter = Object.keys(mongoFilter).length === 0 ? false : true
+
+        if(isTitle) {
+            const mysqlJobs = await db
+            .select({
+                jobId: jobs.jobId,
+                title: jobs.title,
+                deadlineDate: jobs.deadlineDate,
+                postedBy: jobs.postedBy
+            })
+            .from(jobs)
+            .where(and(...mysqlCond))
+
+            const jobIdArr = mysqlJobs.map((job)=>job.jobId)
+            mongoFilter['jobId'] = {$in: jobIdArr}
+
+            const [mongoDetails,totalCount] = await Promise.all([
+                JobDetail
+                .find(mongoFilter)
+                .select('-_id -__v')
+                .skip(skip)
+                .limit(limit)
+                .lean()
+                ,
+                JobDetail
+                .countDocuments(mongoFilter)
+            ])
+
+            const allJobs = mongoDetails.map((job) => {
+                const mysqlJob = mysqlJobs.find(m => m.jobId === job.jobId)
+                return { 
+                    ...mysqlJob,
+                    details: job
+                }
+            })
+            return {
+                pagination: {
+                    totalJobs: totalCount,
+                    totalPages: Math.ceil(totalCount/limit),
+                    page,
+                    limit
+                },
+                allJobs
+            }
+        }
+
+        if(isMongoFilter && !isTitle) {
+            const mongoDetails = await JobDetail
+            .find(mongoFilter)
+            .select('-_id -__v')
+            .lean()
+            const jobIdArr = mongoDetails.map((job)=>job.jobId)
+            mysqlCond.push(inArray(jobs.jobId, jobIdArr))
+
+            const [mysqlJobs, [totalCount]] = await Promise.all([
+                db
+                .select({
+                    jobId: jobs.jobId,
+                    title: jobs.title,
+                    deadlineDate: jobs.deadlineDate,
+                    postedBy: jobs.postedBy
+                })
+                .from(jobs)
+                .where(and(...mysqlCond))
+                .limit(limit)
+                .offset(skip)
+                ,
+                
+                db.select({
+                    jobs: count()
+                })
+                .from(jobs)
+                .where(and(...mysqlCond))
+            ])
+
+            const allJobs = mysqlJobs.map((job)=> {
+                const details = mongoDetails.find(m => m.jobId === job.jobId)
+                return { 
+                    ...job, 
+                    details: details ?? {}
+                }
+            })
+            return  {
+                pagination: {
+                    totalJobs: totalCount.jobs,
+                    totalPages: Math.ceil(totalCount.jobs/limit),
+                    page,
+                    limit
+                },
+                allJobs
+            }
+        }
+
+        if(!isMongoFilter && !isTitle) {
+            const [mysqlJob, [totalCount]] = await Promise.all([
+                db
+                .select({
+                    jobId: jobs.jobId,
+                    title: jobs.title,
+                    deadlineDate: jobs.deadlineDate,
+                    postedBy: jobs.postedBy
+                })
+                .from(jobs)
+                .where(and(...mysqlCond))
+                .orderBy(desc(jobs.createdAt))
+                .limit(limit)
+                .offset(skip)
+                ,
+                
+                db.select({
+                    jobs: count()
+                })
+                .from(jobs)
+                .where(and(...mysqlCond))
+            ])
+
+            const jobIdArr = mysqlJob.map((job)=>job.jobId)
+            const mongoDetails = await JobDetail
+            .find({jobId: {$in: jobIdArr}})
+            .select('-_id -__v')
+            .lean()
+
+            const allJobs = mysqlJob.map((job)=> {
+                const details = mongoDetails.find(m => m.jobId === job.jobId)
+                return { 
+                    ...job, 
+                    details: details ?? {}
+                }
+            })
+            return {
+                pagination: {
+                    totalJobs: totalCount.jobs,
+                    totalPages: Math.ceil(totalCount.jobs/limit),
+                    page,
+                    limit
+                },
+                allJobs
+            }
+        }    
     }
 }

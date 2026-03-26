@@ -25,6 +25,7 @@ export const myProfileServices = {
             {jobSeekerId: userId},
             {_id:0, isHidden:0, jobSeekerId: 0, __v:0}
         )
+        .lean()
 
         return {
             ...user,
@@ -82,6 +83,7 @@ export const companyProfileServices = {
             {companyId: userId},
             {_id:0, isHidden:0, jobSeekerId: 0, __v:0}
         )
+        .lean()
 
         return {
             ...user,
@@ -113,6 +115,7 @@ export const viewProfileServices = {
             },
             {_id:0, isHidden:0, jobSeekerId: 0, __v:0, createdAt:0, updatedAt:0}
         )
+        .lean()
 
         return {
             ...user,
@@ -141,6 +144,7 @@ export const viewProfileServices = {
             },
             {_id:0, isHidden:0, companyId: 0, __v:0, createdAt:0, updatedAt:0}
         )
+        .lean()
 
         return {
             ...user,

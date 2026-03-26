@@ -33,3 +33,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvb
 ### get the job details
 GET http://localhost:3000/api/jobs/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0MDA2NDI2LCJleHAiOjE3NzQwMDcwMjZ9.dshmrW2Q_9_5XiXszGNIdilAvQqVbNd-4LUP8THwiaM
+
+### view jobs
+GET http://localhost:3000/api/jobs?title=backend&position=junior
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0NDQ2ODc5LCJleHAiOjE3NzQ0NDc0Nzl9.a-HbuybjiqOnF4B7C9HIJCOON1eh3T9qDk8KlwXqCIg
