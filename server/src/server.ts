@@ -10,7 +10,7 @@ import authRouter from './routes/auth.route'
 import profileRouter from './routes/profile.route'
 import jobRouter from './routes/job.route'
 import cookieParser from 'cookie-parser'
-import { expiredJobsCron } from './cron/job.cron'
+import { expiredJobsCron, permanentlyDeleteJobs } from './cron/job.cron'
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -37,6 +37,8 @@ const startServer = async ()=> {
         //initializing cron jobs
         console.log("Cleaning up expired jobs")
         expiredJobsCron()
+
+        permanentlyDeleteJobs()
 
         //listen on port 3000
         app.listen(PORT,()=>{

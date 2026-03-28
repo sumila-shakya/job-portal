@@ -23,6 +23,7 @@ export const jobs = mysqlTable('jobs', {
     deadlineDate: timestamp('deadline_date',{mode:'date'}).notNull(),
     isClosed: boolean('is_closed').notNull().default(false),
     isDeleted: boolean('is_deleted').notNull().default(false),
+    deletedAt: timestamp('deleted_at',{mode:'date'}),
 },(table)=>{
     return {nameIdx: index("title_idx").on(table.title)}
 })

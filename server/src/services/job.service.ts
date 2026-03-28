@@ -1,5 +1,5 @@
 import { db } from "../config/mysql.config";
-import { users, jobs, NewJob, Job, User } from "../models/mysql.models";
+import { jobs, NewJob, Job, jobApplications } from "../models/mysql.models";
 import { JobDetail, CompanyProfile } from "../models/mongodb.models";
 import { IJob } from "../@types/interface";
 import { jobType, jobQueryType } from "../utils/validator";
@@ -8,21 +8,6 @@ import { ApiError } from "../utils/apiError";
 
 
 export const jobServices = {
-    async closeExpiredJobs() {
-        try{
-            await db.update(jobs)
-            .set({isClosed: true})
-            .where(and(
-                lt(jobs.deadlineDate, new Date()),
-                eq(jobs.isClosed, false),
-                eq(jobs.isDeleted, false)
-            ))
-            console.log("Expired jobs cleaned up !!")
-        } catch(error) {
-            console.error("Failed to clean up expired jobs: ", error)
-        }
-    },
-
     async postJob(data: jobType, companyId: number) {
         const { title, deadlineDate, ...jobData } = data
         const newJob: NewJob = {
@@ -263,5 +248,88 @@ export const jobServices = {
                 allJobs
             }
         }    
+    },
+
+    async deleteJob(toDelJobId: number, companyId: number) {
+        const [toDelJob] = await db
+        .select()
+        .from(jobs)
+        .where(and(
+            eq(jobs.jobId, toDelJobId),
+            eq(jobs.postedBy, companyId),
+            eq(jobs.isDeleted,false)
+        ))
+
+        if(!toDelJob) {
+            throw new ApiError(404,"Job not found")
+        }
+
+        await Promise.all([
+            db.update(jobs)
+            .set({
+                isClosed: true,
+                isDeleted: true,
+                deletedAt: new Date()
+            })
+            .where(eq(jobs.jobId, toDelJob.jobId))
+            ,
+
+            db.update(jobApplications)
+            .set({
+                applicationStatus: 'cancelled'
+            })
+            .where(eq(jobApplications.jobId, toDelJob.jobId))
+        ]) 
     }
+}
+
+export const cronJobServices = {
+    async closeExpiredJobs() {
+        try{
+            await db.update(jobs)
+            .set({isClosed: true})
+            .where(and(
+                lt(jobs.deadlineDate, new Date()),
+                eq(jobs.isClosed, false),
+                eq(jobs.isDeleted, false)
+            ))
+            console.log("Expired jobs cleaned up !!")
+        } catch(error) {
+            console.error("Failed to clean up expired jobs: ", error)
+        }
+    },
+    
+    async deleteJobs() {
+        try{
+            const GRACE_PERIOD_DAYS = 30
+            const gracePeriodCutOff = new Date()
+            gracePeriodCutOff.setDate(gracePeriodCutOff.getDate() - GRACE_PERIOD_DAYS)
+
+            const expiredJobs = await db
+            .select({
+                jobId: jobs.jobId
+            })
+            .from(jobs)
+            .where(and(
+                eq(jobs.isDeleted, true),
+                lt(jobs.deletedAt, gracePeriodCutOff)
+            ))
+
+            if(expiredJobs.length === 0) return
+            const expiredJobsIds = expiredJobs.map(job => job.jobId)
+
+            await JobDetail.deleteMany({
+                jobId: {$in: expiredJobsIds}
+            })
+
+            await db
+            .delete(jobs)
+            .where(inArray(jobs.jobId, expiredJobsIds))
+
+            console.log("Jobs deleted permanently!!")
+        } catch(error) {
+            console.error("Failed to permanently delete jobs: ", error)   
+        }
+    }
+    
 }

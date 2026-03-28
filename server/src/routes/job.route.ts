@@ -17,6 +17,8 @@ router.post('/',authorizeRole('company'),jobController.postJob)
 router.get('/myJobs',authorizeRole('company'),jobController.getMyJobs)
 //get the job details
 router.get('/:jobId',authorizeRole('company'),jobController.getJobDetails)
+//delete a job
+router.delete('/:jobId',authorizeRole('company'),jobController.deleteJob)
 
 /* ------------------------------- Public Job Routes ------------------------------- */
 //get jobs with searching and filtering

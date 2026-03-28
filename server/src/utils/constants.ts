@@ -3,4 +3,4 @@ export const EMPLOYMENT_TYPE = ['full' , 'part' , 'intern' , 'contract' , 'freel
 export const WORKTYPE = ['remote' , 'on-site' , 'hybrid'] as const;
 export const EDUCATION_LEVEL = ['Bachelor','Master','PhD','+2/A-levels','SEE','others'] as const;
 export const ROLE = ['job_seeker','company','admin'] as const;
-export const APPLICATION_STATUS = ['pending','rejected','accepted','shortlisted','interviewed','withdrawn'] as const;
+export const APPLICATION_STATUS = ['pending','rejected','accepted','shortlisted','interviewed','withdrawn','cancelled'] as const;

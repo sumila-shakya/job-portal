@@ -69,5 +69,23 @@ export const jobController = {
         } catch(error) {
             next(error)
         }
+    },
+
+    async deleteJob(req: Request, res: Response, next: NextFunction) {
+        try {
+            const companyId = req.user?.userId;
+            if(!companyId) {
+                throw new ApiError(401,"Access Denied")
+            }
+            const toDelJobId: number = parseInt(req.params.jobId as string) 
+
+            await jobServices.deleteJob(toDelJobId, companyId)
+
+            res
+            .status(200)
+            .json(new ApiResponse(200, {}, "Job deleted successfully"))
+        } catch(error) {
+            next(error)
+        }
     }
 }
