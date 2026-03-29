@@ -8,6 +8,13 @@
       "when": 1773391233937,
       "tag": "0000_silly_magneto",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1774767590863,
+      "tag": "0001_past_triton",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,2 @@
+ALTER TABLE `job_applications` MODIFY COLUMN `application_status` enum('pending','rejected','accepted','shortlisted','interviewed','withdrawn','cancelled') NOT NULL DEFAULT 'pending';--> statement-breakpoint
+ALTER TABLE `jobs` ADD `deleted_at` timestamp;

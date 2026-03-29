@@ -21,11 +21,11 @@ Content-Type: application/json
 ### logout check
 POST http://localhost:3000/api/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzczNzQwNjc5LCJleHAiOjE3NzM3NDEyNzl9.GAPICVn5Y5DxHFnohYXIS_4GxskzUjdV_MwRTK61Zc0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0NzY4MDgwLCJleHAiOjE3NzQ3Njg2ODB9.iLjDxIBuCFCBaxhd9UcDTgznV2D0nwa2Nmbxb1AdxUU
 
 ### get account check
 GET http://localhost:3000/api/auth/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0NDQ2ODc5LCJleHAiOjE3NzQ0NDc0Nzl9.a-HbuybjiqOnF4B7C9HIJCOON1eh3T9qDk8KlwXqCIg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0NzY4NDk3LCJleHAiOjE3NzQ3NjkwOTd9.wr3oMpjLncPuCVlOlTofaHV_P3szzxT_agRPTdS5V4o
 
 ### get new access token
 POST http://localhost:3000/api/auth/refresh

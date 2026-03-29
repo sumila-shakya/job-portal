@@ -47,6 +47,10 @@ export const jobController = {
                 throw new ApiError(401,"Access Denied")
             }
             const reqJobId: number = parseInt(req.params.jobId as string)
+            if(Number.isNaN(reqJobId)) {
+                throw new ApiError(400,"The valid job id must be provided")
+            }
+
             const jobDetails = await jobServices.getJobDetails(companyId, reqJobId)
             
             res
@@ -78,6 +82,9 @@ export const jobController = {
                 throw new ApiError(401,"Access Denied")
             }
             const toDelJobId: number = parseInt(req.params.jobId as string) 
+            if(Number.isNaN(toDelJobId)) {
+                throw new ApiError(400,"The valid job id must be provided")
+            }
 
             await jobServices.deleteJob(toDelJobId, companyId)
 

@@ -124,8 +124,8 @@ export const viewProfileController = {
             }
 
             const jobSeekerId: number = parseInt(req.params.userId as string)
-            if(!jobSeekerId) {
-                throw new ApiError(400,"The user id must be provided")
+            if(Number.isNaN(jobSeekerId)) {
+                throw new ApiError(400,"The valid user id must be provided")
             }
 
             const data = await viewProfileServices.viewJSProfile(jobSeekerId)
@@ -146,8 +146,8 @@ export const viewProfileController = {
             }
 
             const companyId: number = parseInt(req.params.userId as string)
-            if(!companyId) {
-                throw new ApiError(400,"The user id must be provided")
+            if(Number.isNaN(companyId)) {
+                throw new ApiError(400,"The valid company id must be provided")
             }
 
             const data = await viewProfileServices.viewCompanyProfile(companyId)
