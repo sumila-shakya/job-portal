@@ -21,7 +21,7 @@ Content-Type: application/json
 ### logout check
 POST http://localhost:3000/api/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0NzY4MDgwLCJleHAiOjE3NzQ3Njg2ODB9.iLjDxIBuCFCBaxhd9UcDTgznV2D0nwa2Nmbxb1AdxUU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0OTI3MTU4LCJleHAiOjE3NzQ5Mjc3NTh9.Hsyr-tlm27AZlBRBmLaXm81-8oUAfGoOy3jOsZHE6NU
 
 ### get account check
 GET http://localhost:3000/api/auth/account

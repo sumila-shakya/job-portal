@@ -95,9 +95,15 @@ const jobQSchema = z.object({
     experience_max: z.coerce.number().positive(),
     education_level: z.enum(EDUCATION_LEVEL),
     page: z.coerce.number().min(1).default(1),
-    limit: z.coerce.number().min(1).max(5)
+    limit: z.coerce.number().min(1).max(5).default(5)
 })
 export const jobQuerySchema = jobQSchema.partial()
+
+/* ------------------------------- Applied Job Validation ------------------------------- */
+export const appliedJobSchema = z.object({
+    page: z.coerce.number().min(1).default(1).optional(),
+    limit: z.coerce.number().min(1).max(5).default(5).optional()
+})
 
 export type registrationType = z.infer<typeof registrationSchema>
 export type loginType = z.infer<typeof loginSchema>
@@ -105,3 +111,4 @@ export type updateJSProfileType = z.infer<typeof updateJSProfileSchema>
 export type updateComProfileType = z.infer<typeof updateComProfileSchema>
 export type jobType = z.infer<typeof jobSchema>
 export type jobQueryType = z.infer<typeof jobQuerySchema>
+export type appliedJobsType = z.infer<typeof appliedJobSchema>

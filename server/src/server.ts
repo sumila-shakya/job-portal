@@ -10,6 +10,7 @@ import authRouter from './routes/auth.route'
 import profileRouter from './routes/profile.route'
 import jobRouter from './routes/job.route'
 import cookieParser from 'cookie-parser'
+import applicationRouter from './routes/application.route'
 import { expiredJobsCron, permanentlyDeleteJobs } from './cron/job.cron'
 
 const PORT = process.env.PORT || 3000
@@ -22,6 +23,7 @@ app.use(cookieParser())
 app.use('/api/auth',authRouter)
 app.use('/api/profile',profileRouter)
 app.use('/api/jobs',jobRouter)
+app.use('/api/application',applicationRouter)
 
 const startServer = async ()=> {
     try {

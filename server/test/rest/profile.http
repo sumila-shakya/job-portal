@@ -1,6 +1,6 @@
 ### get my profile route
 GET http://localhost:3000/api/profile/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0NzY3ODA2LCJleHAiOjE3NzQ3Njg0MDZ9.wioyiCCnCu70_BC27yXpj_nnAB4snPSwRE8t-nVn2RQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0OTI2NzY5LCJleHAiOjE3NzQ5MjczNjl9.y9YpYeux6v7bbPBnB6rYTI0SjxU-rtRWlS6U-lqER5M
 
 ### get company profile route
 GET  http://localhost:3000/api/profile/company/me
