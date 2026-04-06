@@ -1,5 +1,5 @@
 import {z} from 'zod'
-import { ROLE, EDUCATION_LEVEL, POSITION, WORKTYPE, EMPLOYMENT_TYPE } from './constants'
+import { ROLE, EDUCATION_LEVEL, POSITION, WORKTYPE, EMPLOYMENT_TYPE, UPDATE_APPLICATION_STATUS, APPLICATION_STATUS } from './constants'
 
 /* ------------------------------- Registration Validation ------------------------------- */
 export const registrationSchema = z.object({
@@ -105,6 +105,18 @@ export const appliedJobSchema = z.object({
     limit: z.coerce.number().min(1).max(5).default(5).optional()
 })
 
+/* ------------------------------- Update Application Validation ------------------------------- */
+export const updateStatusSchema = z.object({
+    applicationStatus: z.enum(UPDATE_APPLICATION_STATUS)
+})
+
+/* ------------------------------- View Applicant Validation ------------------------------- */
+export const viewApplicantSchema = z.object({
+    page: z.coerce.number().min(1).default(1).optional(),
+    limit: z.coerce.number().min(1).max(5).default(5).optional(),
+    applicationStatus: z.enum(APPLICATION_STATUS).optional()
+})
+
 export type registrationType = z.infer<typeof registrationSchema>
 export type loginType = z.infer<typeof loginSchema>
 export type updateJSProfileType = z.infer<typeof updateJSProfileSchema>
@@ -112,3 +124,5 @@ export type updateComProfileType = z.infer<typeof updateComProfileSchema>
 export type jobType = z.infer<typeof jobSchema>
 export type jobQueryType = z.infer<typeof jobQuerySchema>
 export type appliedJobsType = z.infer<typeof appliedJobSchema>
+export type updateStatusType = z.infer<typeof updateStatusSchema>
+export type viewApplicantType = z.infer<typeof viewApplicantSchema>

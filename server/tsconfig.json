@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "node16",
         "target": "es2020",
         "rootDir": "./src",
         "outDir": "./dist",
@@ -8,7 +8,7 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "moduleResolution": "node",
+        "moduleResolution": "node16",
         "noImplicitAny": true,
         "typeRoots": ["src/@types","node_modules/@types"]
     },

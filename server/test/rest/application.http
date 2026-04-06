@@ -1,6 +1,6 @@
 ### apply for the job
-POST http://localhost:3000/api/jobs/2/apply
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0OTI3MjMwLCJleHAiOjE3NzQ5Mjc4MzB9.8Pyx1BYGvQVmo2VzpMUi3diZgBJuD9Bf_PapqyhKi2I
+POST http://localhost:3000/api/jobs/3/apply
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc1MjI4MTY1LCJleHAiOjE3NzUyMjg3NjV9.LhJm8UFBBSoEHGBz0L0CSchdOtGF0GnNko9hUhi9EAQ
 Content-Type: application/json
 
 {}
@@ -16,3 +16,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvb
 Content-Type: application/json
 
 {}
+
+### view applicants
+GET http://localhost:3000/api/application/job/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc1MjI4NTE1LCJleHAiOjE3NzUyMjkxMTV9.u7WxcnRgoYtkiFwhYyfxdZ0uKkrBEArx63KEsTR2fSs
+
+### update application status
+PATCH http://localhost:3000/api/application/2/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc1MjI4NTE1LCJleHAiOjE3NzUyMjkxMTV9.u7WxcnRgoYtkiFwhYyfxdZ0uKkrBEArx63KEsTR2fSs
+Content-Type: application/json
+
+{
+    "applicationStatus": "shortlisted"
+}

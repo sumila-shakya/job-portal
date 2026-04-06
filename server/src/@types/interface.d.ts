@@ -1,4 +1,4 @@
-import { POSITION, EMPLOYMENT_TYPE, WORKTYPE, EDUCATION_LEVEL, ROLE } from "../utils/constants";
+import { POSITION, EMPLOYMENT_TYPE, WORKTYPE, EDUCATION_LEVEL, ROLE, APPLICATION_STATUS } from "../utils/constants";
 import { updateJSProfileType } from "../utils/validator"
 
 export interface Payload {
@@ -53,3 +53,5 @@ export interface IJob {
     experience?: { min: number, max: number},
     category: string
 }
+
+export type applicationStatus = typeof APPLICATION_STATUS[number]

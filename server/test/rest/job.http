@@ -1,11 +1,11 @@
 ### post job
 POST http://localhost:3000/api/jobs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0OTI3MTU4LCJleHAiOjE3NzQ5Mjc3NTh9.Hsyr-tlm27AZlBRBmLaXm81-8oUAfGoOy3jOsZHE6NU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc1MjI4MDMxLCJleHAiOjE3NzUyMjg2MzF9.vpYYmuJP2f1q-FCU_JB0JWAi_l_-e0ZZZEdG84BI9Fo
 
 {
     "title": "Backend developer",
-    "deadlineDate": "2026-04-01",
+    "deadlineDate": "2026-05-01",
     "requirement": ["Node JS","Typescript","MySQL"],
     "position": "junior",
     "employmentType": "intern",
@@ -28,15 +28,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvb
 
 ### get all posted jobs
 GET http://localhost:3000/api/jobs/myJobs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0OTI3MTU4LCJleHAiOjE3NzQ5Mjc3NTh9.Hsyr-tlm27AZlBRBmLaXm81-8oUAfGoOy3jOsZHE6NU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc1MjI4NTE1LCJleHAiOjE3NzUyMjkxMTV9.u7WxcnRgoYtkiFwhYyfxdZ0uKkrBEArx63KEsTR2fSs
 
 ### get the job details
-GET http://localhost:3000/api/jobs/1
+GET http://localhost:3000/api/jobs/myJobs/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc0NzY4Mzc2LCJleHAiOjE3NzQ3Njg5NzZ9.jLAhli56XtBxuxi1dywFimoarBiFOkZYb_aEeRhBzSQ
 
 ### view jobs
 GET http://localhost:3000/api/jobs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc0OTI3MjMwLCJleHAiOjE3NzQ5Mjc4MzB9.8Pyx1BYGvQVmo2VzpMUi3diZgBJuD9Bf_PapqyhKi2I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc1MjI4MTY1LCJleHAiOjE3NzUyMjg3NjV9.LhJm8UFBBSoEHGBz0L0CSchdOtGF0GnNko9hUhi9EAQ
 
 ### delete job
 DELETE http://localhost:3000/api/jobs/1

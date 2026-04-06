@@ -15,4 +15,10 @@ router.patch('/:applicationId/withdraw',authorizeRole('job_seeker'),applicationC
 //view all the applied job
 router.get('/me',authorizeRole('job_seeker'),applicationController.viewAppliedJobs)
 
+//update application status
+router.patch('/:applicationId/status',authorizeRole('company'),applicationController.updateApplicationStatus)
+
+//get all applications for the job
+router.get('/job/:jobId',authorizeRole('company'),applicationController.viewApplicants)
+
 export default router
