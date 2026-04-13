@@ -12,6 +12,7 @@ import jobRouter from './routes/job.route'
 import cookieParser from 'cookie-parser'
 import applicationRouter from './routes/application.route'
 import { expiredJobsCron, permanentlyDeleteJobs } from './cron/job.cron'
+import { permanentlyDeactivateUsers } from './cron/auth.cron'
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -37,10 +38,15 @@ const startServer = async ()=> {
         console.log(`MySQL database connected`)
 
         //initializing cron jobs
+        
         console.log("Cleaning up expired jobs")
         expiredJobsCron()
 
+        console.log("Cleaning up the deleted jobs")
         permanentlyDeleteJobs()
+
+        console.log("Cleaning up the deactivated users")
+        permanentlyDeactivateUsers()
 
         //listen on port 3000
         app.listen(PORT,()=>{

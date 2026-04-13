@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/apiError";
 import { ZodError } from "zod";
 
+//global error handler
 export const errorHandler = (
     err:any, 
     req:Request, 
@@ -9,10 +10,13 @@ export const errorHandler = (
     next:NextFunction
 )=> {
     let error  = err
+
+    //handling zod error
     if(error instanceof ZodError) {
         error = new ApiError(400, "validation failed", error.issues)
     }
 
+    //handling non ApiError
     else if(!(error instanceof ApiError)) {
         const statusCode = error.statusCode || 500
         const message = error.message || "Internal server error"

@@ -15,6 +15,13 @@
       "when": 1774767590863,
       "tag": "0001_past_triton",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1776053644897,
+      "tag": "0002_brief_maginty",
+      "breakpoints": true
     }
   ]
 }

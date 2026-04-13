@@ -3,13 +3,16 @@ import { jwtUtils } from "../utils/jwt";
 import { ApiError } from "../utils/apiError";
 import { Payload } from "../@types/interface";
 
+//authorize users 
 export const authMiddleware = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const authHeader = req.headers.authorization
         const token = authHeader && authHeader.split(' ')[1]
+
         if(!token) {
             throw new ApiError(401,"Token is required")
         }
+        
         const decoded: Payload = jwtUtils.verifyToken(token)
 
         req.user = decoded

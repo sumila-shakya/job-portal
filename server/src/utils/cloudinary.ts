@@ -10,14 +10,20 @@ cloudinary.config({
 
 export const uploadOnCloudinary = async (localFilePath: string) => {
     try {
-        if(!localFilePath) return null
+        if(!localFilePath) 
+            return null
+
+        //upload resume on cloudinary
         const uploadResult = await cloudinary.uploader.upload(localFilePath, {
             resource_type: 'auto',
             folder: 'resumes',
             access_mode: 'public'
         })
+
+        //delete the resume filefrom local uploads folder
         console.log("File uploaded successfully on ", uploadResult.url)
         fs.unlinkSync(localFilePath)
+
         return uploadResult
     } catch(error) {
         fs.unlinkSync(localFilePath)

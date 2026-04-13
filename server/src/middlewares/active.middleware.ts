@@ -4,6 +4,7 @@ import { db } from "../config/mysql.config";
 import { users,User } from "../models/mysql.models";
 import { and, eq } from "drizzle-orm";
 
+//check for active users
 export const checkActiveUser = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const userId = req.user?.userId;
@@ -18,9 +19,11 @@ export const checkActiveUser = async(req: Request, res: Response, next: NextFunc
             eq(users.userId,userId),
             eq(users.isActive,true)
         ))
+
         if(!user) {
             throw new ApiError(403, "Account is not active")
         }
+        
         next()
     } catch(error) {
         next(error)

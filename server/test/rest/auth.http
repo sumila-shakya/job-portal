@@ -21,11 +21,11 @@ Content-Type: application/json
 ### logout check
 POST http://localhost:3000/api/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc1MjI4MTY1LCJleHAiOjE3NzUyMjg3NjV9.LhJm8UFBBSoEHGBz0L0CSchdOtGF0GnNko9hUhi9EAQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU5MDI5LCJleHAiOjE3NzYwNTk2Mjl9.1XaeZ6jnM7qOpulcskssWuuJwJOPSmPYQaVSk2OT9Ck
 
 ### get account check
 GET http://localhost:3000/api/auth/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc1MjI4MDMxLCJleHAiOjE3NzUyMjg2MzF9.vpYYmuJP2f1q-FCU_JB0JWAi_l_-e0ZZZEdG84BI9Fo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU4NjIxLCJleHAiOjE3NzYwNTkyMjF9._om4nNwWoAm7AO0qWvALrUrQHSIY0QrZOgiehA7Y7Us
 
 ### get new access token
 POST http://localhost:3000/api/auth/refresh
@@ -72,3 +72,7 @@ Content-Type: application/json
     "email":"kumar123@gmail.com",
     "password":"P@ssw0rd"
 }
+
+### deactivate user
+DELETE http://localhost:3000/api/auth/deactivate
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU4NjIxLCJleHAiOjE3NzYwNTkyMjF9._om4nNwWoAm7AO0qWvALrUrQHSIY0QrZOgiehA7Y7Us 

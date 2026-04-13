@@ -6,15 +6,18 @@ import { applicationController } from "../controllers/application.controller";
 
 const router = Router()
 
+//check for valid and active user
 router.use(authMiddleware)
 router.use(checkActiveUser)
 
+/* ------------------------------- Job Seeker Priviledge Routes ------------------------------- */
 //withdraw application
 router.patch('/:applicationId/withdraw',authorizeRole('job_seeker'),applicationController.withdrawJob)
 
 //view all the applied job
 router.get('/me',authorizeRole('job_seeker'),applicationController.viewAppliedJobs)
 
+/* ------------------------------- Company Priviledge Routes ------------------------------- */
 //update application status
 router.patch('/:applicationId/status',authorizeRole('company'),applicationController.updateApplicationStatus)
 

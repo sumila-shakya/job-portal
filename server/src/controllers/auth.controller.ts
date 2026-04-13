@@ -17,6 +17,7 @@ export const authController = {
 
             const {refreshToken,...data} = newUser
 
+            //cookie options
             const options = {
                 httpOnly: true,
                 maxAge: 7*24*60*60*1000,
@@ -44,6 +45,7 @@ export const authController = {
 
             const {refreshToken,...data} = user
 
+            //cookie option
             const options = {
                 httpOnly: true,
                 maxAge: 7*24*60*60*1000,
@@ -59,15 +61,20 @@ export const authController = {
         }
     },
 
+    //logout function
     async logout(req: Request, res: Response, next: NextFunction) {
         try {
+            //get user id
             const userId = req.user?.userId
+
             if(!userId) {
                 throw new ApiError(401,"Access Denied")
             }
 
+            //auth service function
             await authService.logout(userId)
 
+            //cookie option
             const options = {
                 httpOnly: true,
                 sameSite: "strict" as const
@@ -82,13 +89,17 @@ export const authController = {
         }
     },
 
+    //get user account function
     async getAccount(req: Request, res: Response, next: NextFunction) {
         try {
+            //get user id
             const userId = req.user?.userId
+
             if(!userId) {
                 throw new ApiError(401,"Access Denied")
             }
 
+            //auth service function
             const data = await authService.getAccount(userId)
 
             res
@@ -99,17 +110,23 @@ export const authController = {
         }
     },
 
+    //get new access token function
     async refreshToken(req: Request, res: Response, next: NextFunction) {
         try {
+            //get refresh token from the cookie
             const token = req.cookies?.refreshToken
+
             if(!token) {
                 throw new ApiError(401,"Refresh token is required")
             }
 
+            //verify refresh token
             const {userId, role} = jwtUtils.verifyRefreshToken(token)
 
+            //get new access and refresh token
             const {accessToken, refreshToken} = await authService.refreshToken(token, {userId,role})
 
+            //cookie option
             const options = {
                 httpOnly: true,
                 maxAge: 7*24*60*60*1000,
@@ -120,6 +137,35 @@ export const authController = {
             .status(200)
             .cookie('refreshToken',refreshToken,options)
             .json(new ApiResponse(200,{accessToken}))
+        } catch(error) {
+            next(error)
+        }
+    },
+
+    //deactivate user function
+    async deactivateUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            //get user credentials
+            const userId = req.user?.userId
+            const role = req.user?.role
+
+            if(!userId || !role) {
+                throw new ApiError(401,"Access Denied")
+            }
+
+            //auth service function
+            await authService.deactivateUser(userId, role)
+            
+            //cookie options
+            const options = {
+                httpOnly: true,
+                sameSite: "strict" as const
+            }
+
+            res
+            .status(200)
+            .clearCookie('refreshToken',options)
+            .json(new ApiResponse(200, {}, "User deactivated successfully"))
         } catch(error) {
             next(error)
         }
