@@ -41,8 +41,7 @@ export const authService = {
         //create skeleton user profile
         const profileCreator = {
             job_seeker: (userId: number) => JobSeekersProfile.create({jobSeekerId: userId}),
-            company: (userId: number) => CompanyProfile.create({companyId: userId}),
-            admin: (userId: number) => Promise.resolve(null)
+            company: (userId: number) => CompanyProfile.create({companyId: userId})
         }
         try {
             await profileCreator[data.role](newUser.insertId)

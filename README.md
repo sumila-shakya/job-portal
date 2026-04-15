@@ -74,7 +74,7 @@ This project implements **Polyglot Persistence** — using two databases, each c
 - bcrypt password hashing with cost factor 10
 
 ### User Management
-- Role-based access control (`job_seeker`, `company`, `admin`)
+- Role-based access control (`job_seeker`, `company`)
 - Account deactivation with **30-day grace period**
 - Auto-reactivation on login within grace period
 - Automated permanent deletion via cron job
@@ -332,7 +332,7 @@ Available filters:
 users
 ├── user_id (PK)
 ├── name, email (unique), password
-├── role (job_seeker | company | admin)
+├── role (job_seeker | company)
 ├── is_active, deactivated_at
 └── created_at, updated_at
 
@@ -394,7 +394,7 @@ jobDetails
 This project was built alongside BSc CSIT coursework and demonstrates:
 
 ### System Analysis & Design (SAD)
-- **Use Case Analysis** — identified actors (Job Seeker, Company, Admin) and their interactions
+- **Use Case Analysis** — identified actors (Job Seeker, Company) and their interactions
 - **ER Diagram** — designed before writing a single schema
 - **Polyglot Persistence** — architectural pattern for mixed database systems
 - **Saga Pattern** — distributed transaction management
