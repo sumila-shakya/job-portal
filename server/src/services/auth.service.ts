@@ -1,6 +1,7 @@
 import { db } from "../config/mysql.config";
-import { users, refreshTokens, jobs, User, Token, NewUser, NewToken, jobApplications, Job } from "../models/mysql.models";
-import { registrationType, loginType } from "../utils/validator";
+import { users, refreshTokens, jobApplications, jobs, emailVerificationTokens, resetPasswordTokens,
+         User, Token, Job, NewUser, NewToken, NewEmailToken, NewResetPassToken } from "../models/mysql.models";
+import { registrationType, loginType, emailVerificationType, forgetPasswordType, resetPasswordType, requestVerificationType } from "../utils/validator";
 import { and, eq, notInArray, lt, inArray } from "drizzle-orm";
 import { ApiError } from "../utils/apiError";
 import bcrypt from 'bcrypt'
@@ -8,9 +9,11 @@ import { CompanyProfile, JobDetail, JobSeekersProfile } from "../models/mongodb.
 import { jwtUtils } from "../utils/jwt";
 import { Payload } from "../@types/interface";
 import { ROLE } from "../utils/constants";
+import { generateToken, hashToken } from "../utils/token";
+import { sendEmailVerificationMail, sendResetPasswordMail } from "../utils/mailer";
 
 export const authService = {
-    //registration service
+    //registration service function
     async register(data: registrationType) {
         //check if there is any existing user
         const existingUser: User[] = await db
@@ -51,37 +54,74 @@ export const authService = {
             throw new ApiError(500,"Failed to register")
         }
 
-        //generate access and refesh token
-        const payload: Payload = {
+        // generate the verificationToken
+        const verificationToken: string = generateToken()
+
+        const newEmailToken: NewEmailToken = {
             userId: newUser.insertId,
-            role: data.role
+            token: hashToken(verificationToken),
+            expiresAt: new Date(Date.now() + 24*60*60*1000)
         }
 
-        const accessToken: string = jwtUtils.generateAccessToken(payload)
-        const refreshToken: string = jwtUtils.generateRefreshToken(payload)
-        const expiryDate = jwtUtils.getExpiryDate()
-
-        //insert refresh token into the database
-        const token: NewToken = {
-            userId: newUser.insertId,
-            refreshToken: refreshToken,
-            expiresAt: expiryDate
-        }
-
+        // delete the existing verification tokens
         await db
-        .insert(refreshTokens)
-        .values(token) 
+        .delete(emailVerificationTokens)
+        .where(eq(emailVerificationTokens.userId, newUser.insertId))
+
+        // insert the new email verification token
+        await db
+        .insert(emailVerificationTokens)
+        .values(newEmailToken)
+
+        // send email with verification token
+        await sendEmailVerificationMail(data.email, verificationToken)
 
         return {
             userId: newUser.insertId,
             name: data.name,
             email: data.email,
-            role: data.role,
-            accessToken: accessToken,
-            refreshToken: refreshToken
+            role: data.role
         }
     },
 
+    // verify email service function
+    async verifyEmail(data: emailVerificationType) {
+        //check for the token in the database
+        const [tokenRecord] = await db
+        .select()
+        .from(emailVerificationTokens)
+        .where(eq(emailVerificationTokens.token, hashToken(data.token)))
+
+        //if token doesn't exists throw error
+        if(!tokenRecord) {
+            throw new ApiError(400, "Invalid token")
+        }
+
+        //if the token is expired throw error
+        if(tokenRecord.expiresAt < new Date()) {
+            // delete the expired token
+            await db
+            .delete(emailVerificationTokens)
+            .where(eq(emailVerificationTokens.tokenId, tokenRecord.tokenId))
+
+            throw new ApiError(400, "Token Expired. Please, re-request the verification email")
+        }
+
+        // update the user to verified
+        await db
+        .update(users)
+        .set({
+            isVerified: true
+        })
+        .where(eq(users.userId, tokenRecord.userId)),
+
+        // delete the email verification token
+        await db
+        .delete(emailVerificationTokens)
+        .where(eq(emailVerificationTokens.userId, tokenRecord.userId))
+    },
+
+    //login service function
     async login(data: loginType) {
         const [existingUser]: User[] = await db
         .select()
@@ -97,6 +137,11 @@ export const authService = {
         const isValidPassword:boolean = await bcrypt.compare(data.password,existingUser.password)
         if(!isValidPassword) {
             throw new ApiError(401,"Invalid credentials")
+        }
+
+        // verify the user
+        if(!existingUser.isVerified) {
+            throw new ApiError(403, "please verify your email before logging in")
         }
 
         //calculate the grace period
@@ -329,6 +374,153 @@ export const authService = {
         await db
         .delete(refreshTokens)
         .where(eq(refreshTokens.userId,userId))
+    },
+
+    // forget password serivce function
+    async forgetPassword(data: forgetPasswordType) {
+        //find the user according to the email
+        const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, data.email))
+
+        // if the user doesn't exists return without throwing error
+        if(!user) {
+            return
+        }
+
+        //generate the reset token
+        const resetToken: string = generateToken()
+
+        const newResetToken: NewResetPassToken = {
+            userId: user.userId,
+            token: hashToken(resetToken),
+            expiresAt: new Date(Date.now() + 15*60*1000)
+        }
+
+        // delete the existing reset tokens
+        await db
+        .delete(resetPasswordTokens)
+        .where(eq(resetPasswordTokens.userId, user.userId))
+
+        // insert the new reset token
+        await db
+        .insert(resetPasswordTokens)
+        .values(newResetToken)
+
+        // send the email to the user's inbox
+        await sendResetPasswordMail(user.email, resetToken)
+    },
+
+    // reset password service function
+    async resetPassword(data: resetPasswordType) {
+        //check for the token in the database
+        const [tokenRecord] = await db
+        .select()
+        .from(resetPasswordTokens)
+        .where(eq(resetPasswordTokens.token, hashToken(data.token)))
+
+        //if token doesn't exists throw error
+        if(!tokenRecord) {
+            throw new ApiError(400, "Invalid token")
+        }
+
+        //if the token is expired throw error
+        if(tokenRecord.expiresAt < new Date()) {
+            throw new ApiError(400, "Token Expired")
+        }
+
+        // hash the password for safety
+        const hashedPassword: string = await bcrypt.hash(data.password, 10)
+
+        // update the database with new password
+        const [result] = await db.update(users)
+        .set({
+            password: hashedPassword
+        })
+        .where(eq(users.userId, tokenRecord.userId))
+
+        if(result.affectedRows === 0) {
+            throw new ApiError(404, "User Not Found")
+        }
+
+        const [existingUser] = await db
+        .select({
+            role: users.role
+        })
+        .from(users)
+        .where(eq(users.userId, tokenRecord.userId))
+
+        const payload: Payload = {
+            userId: tokenRecord.userId,
+            role: existingUser.role
+        }
+
+        // generate the new access and refresh tokens
+        const accessToken: string = jwtUtils.generateAccessToken(payload)
+        const refreshToken: string = jwtUtils.generateRefreshToken(payload)
+        const expiryDate: Date = jwtUtils.getExpiryDate()
+
+        // delete the old token
+        await db
+        .delete(refreshTokens)
+        .where(eq(refreshTokens.userId, tokenRecord.userId))
+
+        const newToken: NewToken = {
+            userId: tokenRecord.userId,
+            refreshToken: refreshToken,
+            expiresAt: expiryDate
+        }
+
+        // insert the new token
+        await db
+        .insert(refreshTokens)
+        .values(newToken)
+        
+        return {
+            accessToken,
+            refreshToken
+        }
+    },
+
+    // resend verification email service function
+    async resendVerification(data: requestVerificationType) {
+        //find the user according to the email
+        const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, data.email))
+
+        // if the user doesn't exists return without throwing error
+        if(!user) {
+            return
+        }
+
+        if(user.isVerified) {
+            return
+        }
+
+        //generate the reset token
+        const verificationToken: string = generateToken()
+
+        const newEmailToken: NewEmailToken = {
+            userId: user.userId,
+            token: hashToken(verificationToken),
+            expiresAt: new Date(Date.now() + 24*60*60*1000)
+        }
+
+        // delete the existing verification tokens
+        await db
+        .delete(emailVerificationTokens)
+        .where(eq(emailVerificationTokens.userId, user.userId))
+
+        // insert the new email verification token
+        await db
+        .insert(emailVerificationTokens)
+        .values(newEmailToken)
+
+        // send email with verification token
+        await sendEmailVerificationMail(data.email, verificationToken)
     }
 }
 

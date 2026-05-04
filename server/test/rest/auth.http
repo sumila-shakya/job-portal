@@ -21,11 +21,11 @@ Content-Type: application/json
 ### logout check
 POST http://localhost:3000/api/auth/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU5MDI5LCJleHAiOjE3NzYwNTk2Mjl9.1XaeZ6jnM7qOpulcskssWuuJwJOPSmPYQaVSk2OT9Ck
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc3ODY2ODk2LCJleHAiOjE3Nzc4Njc0OTZ9.PQsRVKlfHWj-kynC0a5lzKHjsDJcroAxWJYuG3JCAC8
 
 ### get account check
 GET http://localhost:3000/api/auth/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU4NjIxLCJleHAiOjE3NzYwNTkyMjF9._om4nNwWoAm7AO0qWvALrUrQHSIY0QrZOgiehA7Y7Us
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
 
 ### get new access token
 POST http://localhost:3000/api/auth/refresh
@@ -76,3 +76,25 @@ Content-Type: application/json
 ### deactivate user
 DELETE http://localhost:3000/api/auth/deactivate
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU4NjIxLCJleHAiOjE3NzYwNTkyMjF9._om4nNwWoAm7AO0qWvALrUrQHSIY0QrZOgiehA7Y7Us 
+
+### forget password
+POST http://localhost:3000/api/auth/forget-password
+Content-Type: application/json
+
+{
+    "email":"sumi123@gmail.com"
+}
+
+### reset password
+POST http://localhost:3000/api/auth/reset-password?token=814cc3cf7fcaf4624834af80b864f0aa
+Content-Type: application/json
+
+{
+    "password": "P@ssw0rd"
+}
+
+### verify email
+POST http://localhost:3000/api/auth/verify-email?token=e6d028ec2058a53b854a985bee7576bd
+Content-Type: application/json
+
+{}

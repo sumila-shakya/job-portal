@@ -36,7 +36,7 @@ http:
           - C:\Users\sumil\Downloads\sampleResume.pdf
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU3OTY3LCJleHAiOjE3NzYwNTg1Njd9.5RDiSypVh6kxEugrx7ZuDK6eEQppem-ASMXOqpEuKGE
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc3ODY2ODk2LCJleHAiOjE3Nzc4Njc0OTZ9.PQsRVKlfHWj-kynC0a5lzKHjsDJcroAxWJYuG3JCAC8
 
 settings:
   encodeUrl: true

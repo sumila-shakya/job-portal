@@ -11,7 +11,8 @@ export const users = mysqlTable('users', {
     createdAt: timestamp('created_at',{mode:'date'}).defaultNow(),
     updatedAt: timestamp('updated_at',{ mode:'date'}).defaultNow().onUpdateNow(),
     isActive: boolean('is_active').notNull().default(true),
-    deactivatedAt: timestamp('deactivated_at',{mode:'date'})
+    deactivatedAt: timestamp('deactivated_at',{mode:'date'}),
+    isVerified: boolean('is_verified').notNull().default(false),
 })
 
 //jobs schema
@@ -48,6 +49,30 @@ export const refreshTokens = mysqlTable('refresh_tokens',{
     userId: bigint('user_id',{mode:'number', unsigned:true}).notNull().references(()=>users.userId, {onDelete:'cascade',onUpdate:'cascade'}),
     createdAt: timestamp('created_at',{mode:'date'}).defaultNow(),
     expiresAt: timestamp('expires_at',{mode:'date'}).notNull()
+}, (table) => {
+    return { userIdIdx: index('user_id_idx').on(table.userId) }
+})
+
+// reset password tokens schema
+export const resetPasswordTokens = mysqlTable('reset_password_tokens', {
+    tokenId: serial('token_id').primaryKey(),
+    token: varchar('token', { length: 512 }).notNull(),
+    userId: bigint('user_id', { mode: 'number', unsigned: true }).notNull().references(() => users.userId, { onDelete: 'cascade', onUpdate: 'cascade' }),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+    expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
+}, (table) => {
+    return { userIdIdx: index('user_id_idx').on(table.userId) }
+})
+
+// email verification schema
+export const emailVerificationTokens = mysqlTable('email_verification_tokens', {
+    tokenId: serial('token_id').primaryKey(),
+    token: varchar('token', { length: 512 }).notNull(),
+    userId: bigint('user_id', { mode: 'number', unsigned: true }).notNull().references(() => users.userId, { onDelete: 'cascade', onUpdate: 'cascade' }),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+    expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
+}, (table) => {
+    return { userIdIdx: index('user_id_idx').on(table.userId) }
 })
 
 export type User = typeof users.$inferSelect
@@ -61,3 +86,9 @@ export type NewApplication = typeof jobApplications.$inferInsert
 
 export type Token = typeof refreshTokens.$inferSelect
 export type NewToken = typeof refreshTokens.$inferInsert
+
+export type ResetPassToken = typeof resetPasswordTokens.$inferSelect
+export type NewResetPassToken = typeof resetPasswordTokens.$inferInsert
+
+export type EmailToken = typeof emailVerificationTokens.$inferSelect
+export type NewEmailToken = typeof emailVerificationTokens.$inferInsert

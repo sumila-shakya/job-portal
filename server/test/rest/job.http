@@ -1,11 +1,11 @@
 ### post job
 POST http://localhost:3000/api/jobs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc2MDU4MTQ2LCJleHAiOjE3NzYwNTg3NDZ9.d_b-BzEo4ttdeHBzXgdrU3GAqO3ICEZP2XsDw2_-OYs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
 
 {
     "title": "Backend developer",
-    "deadlineDate": "2026-05-01",
+    "deadlineDate": "2026-06-25",
     "requirement": ["Node JS","Typescript","MySQL"],
     "position": "junior",
     "employmentType": "intern",
@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvb
 
 ### get all posted jobs
 GET http://localhost:3000/api/jobs/myJobs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc2MDU4MTQ2LCJleHAiOjE3NzYwNTg3NDZ9.d_b-BzEo4ttdeHBzXgdrU3GAqO3ICEZP2XsDw2_-OYs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
 
 ### get the job details
 GET http://localhost:3000/api/jobs/myJobs/1

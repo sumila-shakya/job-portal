@@ -117,6 +117,35 @@ export const viewApplicantSchema = z.object({
     applicationStatus: z.enum(APPLICATION_STATUS).optional()
 })
 
+/* ------------------------------- Email Verification Validation ------------------------------- */
+export const emailVerificationSchema = z.object({
+    token: z.string()
+    .length(32, {message: "Invalid token"})
+    .regex(/^[0-9a-f]+$/, {message: "Invalid token"})  
+})
+
+/* ------------------------------- Reset Password Validation ------------------------------- */
+export const resetPasswordSchema = z.object({
+    token: z.string()
+    .length(32, {message: "Invalid token"})
+    .regex(/^[0-9a-f]+$/, {message: "Invalid token"}),
+    password: z.string().min(8, { message:"Password must be atleast 8 characters long" })
+    .regex(/[A-Z]/, { message:"Password must contain at least one uppercase letter" })
+    .regex(/[a-z]/, { message:"Password must contain at least one lowercase letter" })
+    .regex(/[0-9]/, { message:"Password must contain at least one digit" })
+    .regex(/[^a-zA-Z0-9\s]/, { message:"Password must contain at least one special character" })
+})
+
+/* ------------------------------- Re Request Validation ------------------------------- */
+export const requestVerificationSchema = z.object({
+    email: z.string().email({ message: "Invalid email format" })
+})
+
+/* ------------------------------- Forget Password Validation ------------------------------- */
+export const forgetPasswordSchema = z.object({
+    email: z.string().email({ message: "Invalid email format" })
+})
+
 export type registrationType = z.infer<typeof registrationSchema>
 export type loginType = z.infer<typeof loginSchema>
 export type updateJSProfileType = z.infer<typeof updateJSProfileSchema>
@@ -126,3 +155,7 @@ export type jobQueryType = z.infer<typeof jobQuerySchema>
 export type appliedJobsType = z.infer<typeof appliedJobSchema>
 export type updateStatusType = z.infer<typeof updateStatusSchema>
 export type viewApplicantType = z.infer<typeof viewApplicantSchema>
+export type emailVerificationType = z.infer<typeof emailVerificationSchema>
+export type forgetPasswordType = z.infer<typeof forgetPasswordSchema>
+export type resetPasswordType = z.infer<typeof resetPasswordSchema>
+export type requestVerificationType = z.infer<typeof requestVerificationSchema>

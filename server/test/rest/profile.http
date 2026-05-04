@@ -4,7 +4,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvb
 
 ### get company profile route
 GET  http://localhost:3000/api/profile/company/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc2MDU4NDk2LCJleHAiOjE3NzYwNTkwOTZ9.-TUp6_Rro0NB980dCE_cgywQguwDnzdHfrAIATMxNak
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
 
 ### view Job Seeker public profile route
 GET http://localhost:3000/api/profile/1
@@ -17,7 +17,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvb
 ### update Company profile route
 PATCH http://localhost:3000/api/profile/company/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzczNzQwNjc5LCJleHAiOjE3NzM3NDEyNzl9.GAPICVn5Y5DxHFnohYXIS_4GxskzUjdV_MwRTK61Zc0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
 
 {
     "aboutUs": "Google is a great company",

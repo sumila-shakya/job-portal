@@ -29,17 +29,19 @@ This project implements **Polyglot Persistence** — using two databases, each c
 │                  (Node.js + TS)                     │
 └──────────────────┬──────────────────────────────────┘
                    │
-       ┌───────────┴─────────────┐
-       │                         │
-┌──────▼─────────┐         ┌──────▼────────┐
-│    MySQL       │         │   MongoDB     │
-│  (Drizzle)     │         │ (Mongoose)    │
-│                │         │               │
-│ • users        │         │ • profiles    │
-│ • jobs         │         │ • job_details │
-│ • applications │         │ • companies   │
-│ • tokens       │         │               │
-└────────────────┘         └───────────────┘
+       ┌───────────┴────────────────────────────┐
+       │                                        │
+┌──────▼────────────────────┐        ┌──────────▼───────────┐
+│    MySQL                  │        │   MongoDB            │
+│  (Drizzle)                │        │ (Mongoose)           │
+│                           │        │                      │
+│ • users                   │        │ • jobseekerprofiles  │
+│ • jobs                    │        │ • jobdetails         │
+│ • jobApplications         │        │ • companyprofiles    │
+│ • refreshTokens           │        │                      │
+│ • resetPasswordTokens     │        │                      │
+│ • emailVerificationTokens │        │                      │
+└───────────────────────────┘        └──────────────────────┘
 ```
 
 **Why two databases?**
@@ -60,6 +62,7 @@ This project implements **Polyglot Persistence** — using two databases, each c
 | Validation | Zod |
 | Password Hashing | bcrypt |
 | File Upload | Multer + Cloudinary |
+| Email Service | Nodemailer + Mailtrap |
 | Scheduling | node-cron |
 | Cookie Parsing | cookie-parser |
 
@@ -72,6 +75,10 @@ This project implements **Polyglot Persistence** — using two databases, each c
 - HttpOnly cookie for refresh tokens (XSS prevention)
 - `sameSite: strict` cookie policy (CSRF prevention)
 - bcrypt password hashing with cost factor 10
+- **Email verification** on registration (24-hour token expiry)
+- **Password reset** via time-limited email token (15-minute expiry)
+- Token hashing before DB storage (raw token never stored)
+- Silent return on unknown email (user enumeration prevention)
 
 ### User Management
 - Role-based access control (`job_seeker`, `company`)
@@ -132,6 +139,22 @@ Every refresh token use generates a new token and invalidates the old one, enabl
 ### 6. Tombstone Pattern (Soft Delete)
 Records marked as deleted with timestamp, permanently purged after grace period by cron job. Consistent across jobs and user accounts.
 
+### 7. Secure Token Pipeline (Email Verification + Password Reset)
+Raw tokens never stored in database — only hashed versions:
+```
+User receives: raw_token (in email link)
+DB stores:     sha256(raw_token)
+ 
+Verification:
+→ Hash incoming token → compare with DB
+→ Raw token exposure in email doesn't compromise DB
+→ Even if DB is breached, tokens are useless
+```
+Different expiry windows by sensitivity:
+- Email verification token: 24 hours (low urgency)
+- Password reset token: 15 minutes (high sensitivity)
+
+
 ---
 
 ## 📁 Project Structure
@@ -187,6 +210,8 @@ src/
 │   ├── constants.ts              # Enums as const arrays (single source of truth)
 │   ├── validator.ts              # User data validation schema
 │   ├── statusTransition.ts       # Finite State Machine implementation
+│   ├── mailer.ts                 # NodeMailer Configuration and email function
+│   ├── token.ts                  # Reset and Email verification token functions
 │   └── cloudinary.ts             # File upload utility
 │
 └── server.ts                     # Express app setup & cron registration
@@ -251,6 +276,16 @@ REFRESH_TOKEN_SECRET=your_refresh_token_secret
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_SECRET=your_api_secret
 CLOUDINARY_API_KEY=your_api_key
+
+# Ethereal credentials
+MAIL_HOST = "sandbox.smtp.mailtrap.io"
+MAIL_PORT = 587
+MAIL_USER = "your_mailtrap_user"
+MAIL_PASS = "your_mailtrap_pass"
+MAIL_FROM = "noreply@jobportal.com"
+
+# client url
+CLIENT_URL = "http://localhost:5000"
 ```
 
 > ⚠️ The app uses a **fail-fast** pattern — it crashes immediately at startup with a clear message if any required environment variable is missing, rather than failing silently on first request.
@@ -269,6 +304,10 @@ CLOUDINARY_API_KEY=your_api_key
 | POST | `/refresh` | Public | Get new access token |
 | GET | `/account` | Auth | Get current user info |
 | DELETE | `/deactivate` | Auth | Deactivate account (30-day grace period) |
+| POST | `/verify-email` | Public | Verify email with token |
+| POST | `/resend-verification` | Public | Resend verification email |
+| POST | `/forget-password` | Public | Send password reset email |
+| POST | `/reset-password` | Public | Reset password with token |
 
 ### Profile Routes (`/api/profile`)
 
@@ -355,6 +394,18 @@ refresh_tokens
 ├── user_id (FK → users, CASCADE DELETE)
 ├── refresh_token (unique), expires_at
 └── created_at
+
+email_verification_tokens
+├── token_id (PK)
+├── user_id (FK → users, CASCADE DELETE)
+├── token (hashed — raw never stored), expires_at
+└── created_at
+ 
+reset_password_tokens
+├── token_id (PK)
+├── user_id (FK → users, CASCADE DELETE)
+├── token (hashed — raw never stored), expires_at
+└── created_at
 ```
 
 ### MongoDB Collections (Mongoose)
@@ -425,6 +476,10 @@ This project was built alongside BSc CSIT coursework and demonstrates:
 - Role-based access enforced at middleware level
 - Resource ownership verified in service layer
 - Input validation with Zod on all endpoints
+- Email verification tokens hashed before DB storage
+- Password reset tokens hashed before DB storage (15-min expiry)
+- Login blocked until email is verified
+- Password reset invalidates all existing sessions
 
 ---
 
