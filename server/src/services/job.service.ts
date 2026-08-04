@@ -311,9 +311,9 @@ export const jobServices = {
             throw new ApiError(404,"Job not found")
         }
 
-        await Promise.all([
+        await db.transaction( async (tx) => {
             //soft delete the job
-            db.update(jobs)
+            tx.update(jobs)
             .set({
                 isClosed: true,
                 isDeleted: true,
@@ -323,12 +323,12 @@ export const jobServices = {
             ,
 
             //change the status of all application to cancelled
-            db.update(jobApplications)
+            tx.update(jobApplications)
             .set({
                 applicationStatus: 'cancelled'
             })
             .where(eq(jobApplications.jobId, toDelJob.jobId))
-        ]) 
+        }) 
     }
 }
 

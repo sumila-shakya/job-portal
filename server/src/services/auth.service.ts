@@ -293,15 +293,6 @@ export const authService = {
     async deactivateUser(userId: number, role: typeof ROLE[number]) {
         if(role === 'job_seeker') {
             await Promise.all([
-                //soft delete the job seeker account
-                db
-                .update(users)
-                .set({
-                    isActive: false, 
-                    deactivatedAt: new Date()
-                })
-                .where(eq(users.userId, userId)),
-
                 //hide the job seeker profile
                 JobSeekersProfile
                 .updateOne(
@@ -309,16 +300,27 @@ export const authService = {
                     {$set: {isHidden: true}}
                 ),
 
-                //withdraw from all the jobs applied by the user
-                db
-                .update(jobApplications)
-                .set({
-                    applicationStatus: 'withdrawn'
+                db.transaction(async (tx) => {
+                    //soft delete the job seeker account
+                    tx
+                    .update(users)
+                    .set({
+                        isActive: false, 
+                        deactivatedAt: new Date()
+                    })
+                    .where(eq(users.userId, userId)),
+
+                    //withdraw from all the jobs applied by the user
+                    db
+                    .update(jobApplications)
+                    .set({
+                        applicationStatus: 'withdrawn'
+                    })
+                    .where(and(
+                        eq(jobApplications.applicantId, userId),
+                        notInArray(jobApplications.applicationStatus,['accepted','rejected','cancelled','withdrawn'])
+                    ))
                 })
-                .where(and(
-                    eq(jobApplications.applicantId, userId),
-                    notInArray(jobApplications.applicationStatus,['accepted','rejected','cancelled','withdrawn'])
-                ))
             ])
         } else if(role === 'company') {
             const [_,__,jobarr] = await Promise.all([
@@ -350,9 +352,9 @@ export const authService = {
             //get the job ids
             const jobIdArr = jobarr.map(job => job.jobId)
 
-            await Promise.all([
+            await db.transaction( async (tx) => {
                 //soft delete all the jobs posted by the company
-                db.update(jobs)
+                tx.update(jobs)
                 .set({
                     isClosed: true,
                     isDeleted: true,
@@ -361,12 +363,12 @@ export const authService = {
                 .where(inArray(jobs.jobId, jobIdArr)),
 
                 //change all the applications to cancelled
-                db.update(jobApplications)
+                tx.update(jobApplications)
                 .set({
                     applicationStatus: 'cancelled'
                 })
                 .where(inArray(jobApplications.jobId, jobIdArr))
-            ])
+            })
         }
 
         //force logout
