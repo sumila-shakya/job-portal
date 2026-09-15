@@ -1,21 +1,21 @@
 ### get my profile route
-GET http://localhost:3000/api/profile/me
+GET http://localhost:3002/api/profile/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU4NjIxLCJleHAiOjE3NzYwNTkyMjF9._om4nNwWoAm7AO0qWvALrUrQHSIY0QrZOgiehA7Y7Us
 
 ### get company profile route
-GET  http://localhost:3000/api/profile/company/me
+GET  http://localhost:3002/api/profile/company/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
 
 ### view Job Seeker public profile route
-GET http://localhost:3000/api/profile/1
+GET http://localhost:3002/api/profile/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc2MDU4ODUxLCJleHAiOjE3NzYwNTk0NTF9.TYOKytK96TG2ZgY3DKY48TMFOuAZgXLpvnU0X4gOOW4
 
 ### view Company public profile route
-GET http://localhost:3000/api/profile/company/2
+GET http://localhost:3002/api/profile/company/2
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU4NjIxLCJleHAiOjE3NzYwNTkyMjF9._om4nNwWoAm7AO0qWvALrUrQHSIY0QrZOgiehA7Y7Us
 
 ### update Company profile route
-PATCH http://localhost:3000/api/profile/company/me
+PATCH http://localhost:3002/api/profile/company/me
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
 

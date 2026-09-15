@@ -1,28 +1,28 @@
 ### apply for the job
-POST http://localhost:3000/api/jobs/1/apply
+POST http://localhost:3002/api/jobs/1/apply
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU4MzkyLCJleHAiOjE3NzYwNTg5OTJ9.U22f4ZAdYbPaFrKq1OKFYaoqnGOL1uAVsZeG0idTCzc
 Content-Type: application/json
 
 {}
 
 ### view my applications
-GET http://localhost:3000/api/application/me
+GET http://localhost:3002/api/application/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU5MDI5LCJleHAiOjE3NzYwNTk2Mjl9.1XaeZ6jnM7qOpulcskssWuuJwJOPSmPYQaVSk2OT9Ck
 
 
 ### withdraw application
-PATCH http://localhost:3000/api/application/1/withdraw
+PATCH http://localhost:3002/api/application/1/withdraw
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzc2MDU5MDI5LCJleHAiOjE3NzYwNTk2Mjl9.1XaeZ6jnM7qOpulcskssWuuJwJOPSmPYQaVSk2OT9Ck
 Content-Type: application/json
 
 {}
 
 ### view applicants
-GET http://localhost:3000/api/application/job/1
+GET http://localhost:3002/api/application/job/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc2MDU4ODUxLCJleHAiOjE3NzYwNTk0NTF9.TYOKytK96TG2ZgY3DKY48TMFOuAZgXLpvnU0X4gOOW4
 
 ### update application status
-PATCH http://localhost:3000/api/application/1/status
+PATCH http://localhost:3002/api/application/1/status
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc2MDU4NDk2LCJleHAiOjE3NzYwNTkwOTZ9.-TUp6_Rro0NB980dCE_cgywQguwDnzdHfrAIATMxNak
 Content-Type: application/json
 
