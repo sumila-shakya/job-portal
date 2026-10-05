@@ -1,3 +1,4 @@
+export const UPLOAD_DIR = 'uploads/'
 export const POSITION = ['junior' , 'senior'] as const;
 export const EMPLOYMENT_TYPE = ['full' , 'part' , 'intern' , 'contract' , 'freelance'] as const;
 export const WORKTYPE = ['remote' , 'on-site' , 'hybrid'] as const;
