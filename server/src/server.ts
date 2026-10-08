@@ -7,7 +7,7 @@ import { app } from './app'
 import { expiredJobsCron, permanentlyDeleteJobs } from './cron/job.cron'
 import { permanentlyDeactivateUsers } from './cron/auth.cron'
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3002
 
 const startServer = async ()=> {
     try {
@@ -33,7 +33,7 @@ const startServer = async ()=> {
 
         //listen on port 3000
         app.listen(PORT,()=>{
-            console.log(`Server is running on port ${PORT || 3000}`)
+            console.log(`Server is running on port ${PORT || 3002}`)
         })
     }catch(error) {
         const errorMessage = error instanceof Error ? error.message : error

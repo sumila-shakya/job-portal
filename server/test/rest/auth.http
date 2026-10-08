@@ -25,7 +25,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvb
 
 ### get account check
 GET http://localhost:3002/api/auth/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJjb21wYW55IiwiaWF0IjoxNzc3ODY3MTg4LCJleHAiOjE3Nzc4Njc3ODh9.MgJ5BmbioOV8iHfL64cH6EDpOyFnb5_nb8UC_FpGz-s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJqb2Jfc2Vla2VyIiwiaWF0IjoxNzkxNDU5NjYxLCJleHAiOjE3OTE0NjAyNjF9.tnUI34KTjcbkriTtasWhstjqvvkbm0FmiwnRZr4w0Zg
 
 ### get new access token
 POST http://localhost:3002/api/auth/refresh
@@ -94,7 +94,7 @@ Content-Type: application/json
 }
 
 ### verify email
-POST http://localhost:3002/api/auth/verify-email?token=e6d028ec2058a53b854a985bee7576bd
+POST http://localhost:3002/api/auth/verify-email?token=54b78ea76a163fdbd34c1f6683a38b4d
 Content-Type: application/json
 
 {}
